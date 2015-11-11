@@ -1,0 +1,22 @@
+#	define a new house instance with identifier house1
+define house house1
+
+# 	define a new room instance and attach to a house
+define room kitchen1 floor 1 type kitchen house house1
+define room dining_room1 floor 1 type dining_room  house house1
+define room bed_room1 floor 2 type bedroom house house1
+
+# define some ava devices
+define appliance kitchenAva1 type ava room house1:kitchen1
+define appliance kitchenAva2 type ava room house1:kitchen1
+define appliance diningRoomAva1 type ava room house1:dining_room1
+define appliance diningRoomAva2 type ava room house1:dining_room1
+
+# create a new refrigerator
+define appliance kitchen1Refrigerator1 type refrigerator room house1:kitchen1
+
+# set beer-count to 4. Since beer-count not less than 4, no rule triggers.
+set appliance house1:kitchen1:kitchen1Refrigerator1 status beer-count value 4
+
+# set beer-count to 3. Since beer-count is less than 4, more beer is ordered.
+set appliance house1:kitchen1:kitchen1Refrigerator1 status beer-count value 3

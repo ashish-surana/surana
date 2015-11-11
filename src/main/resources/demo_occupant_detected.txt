@@ -1,0 +1,50 @@
+#	define a new house instance with identifier house1
+define house house1
+
+# 	define a new room instance and attach to a house
+define room kitchen1 floor 1 type kitchen house house1
+define room dining_room1 floor 1 type dining_room  house house1
+
+# define some lights
+define appliance kitchenLight1 type light room house1:kitchen1
+define appliance diningRoomLight1 type light room house1:dining_room1
+define appliance diningRoomLight2 type light room house1:dining_room1
+
+# define some thermostats
+define appliance kitchenThermostat1 type thermostat room house1:kitchen1
+define appliance diningRoomThermostat1 type thermostat room house1:dining_room1
+define appliance diningRoomThermostat2 type thermostat room house1:dining_room1
+
+# turn on diningRoomLight1 in the dining_room1
+set appliance house1:dining_room1:diningRoomLight1 status mode value ON
+
+#	define a new occupant
+define occupant joe_smith type adult
+define occupant Rover type pet
+
+#	add joe_smith as an occupant to house1
+add occupant joe_smith to_house house1
+add occupant Rover to_house house1
+
+#	create a new sensor in a room
+define sensor kitchenCamera1 type camera room house1:kitchen1
+define sensor diningRoomCamera1 type camera room house1:dining_room1
+
+# kitchenCamera1 detects joe_smith and Rover entering kitchen1
+set sensor house1:kitchen1:kitchenCamera1 status OCCUPANT_DETECTED value "joe_smith"
+set sensor house1:kitchen1:kitchenCamera1 status OCCUPANT_DETECTED value "Rover"
+
+# show that joe_smith and Rover are in kitchen1
+show configuration room house1:kitchen1
+
+# diningRoomCamera1 detects joe_smith entering dining_room1
+set sensor house1:dining_room1:diningRoomCamera1 status OCCUPANT_DETECTED value "joe_smith"
+
+# show that joe_smith is in dining_room1
+show configuration room house1:dining_room1
+
+# show that only Rover is in kitchen1
+show configuration room house1:kitchen1
+
+# 	show entire configuration
+show configuration

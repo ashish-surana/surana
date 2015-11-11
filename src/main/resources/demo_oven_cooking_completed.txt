@@ -1,0 +1,28 @@
+#	define a new house instance with identifier house1
+define house house1
+
+# 	define a new room instance and attach to a house
+define room kitchen1 floor 1 type kitchen house house1
+define room dining_room1 floor 1 type dining_room  house house1
+define room bed_room1 floor 2 type bedroom house house1
+
+# define some ava devices
+define appliance kitchenAva1 type ava room house1:kitchen1
+define appliance kitchenAva2 type ava room house1:kitchen1
+define appliance diningRoomAva1 type ava room house1:dining_room1
+define appliance diningRoomAva2 type ava room house1:dining_room1
+
+# create a new oven
+define appliance kitchen1Oven1 type oven room house1:kitchen1
+
+# set time-to-cook to zero. Since oven is not turned on, no rule triggers.
+set appliance house1:kitchen1:kitchen1Oven1 status time-to-cook value 0
+
+# now set time-to-cook to 20. 
+set appliance house1:kitchen1:kitchen1Oven1 status time-to-cook value 20
+
+# turn on the oven
+set appliance house1:kitchen1:kitchen1Oven1 status power value ON
+
+# set time-to-cook to zero. Since oven is turned on, ava(s) will notify that food is ready.
+set appliance house1:kitchen1:kitchen1Oven1 status time-to-cook value 0

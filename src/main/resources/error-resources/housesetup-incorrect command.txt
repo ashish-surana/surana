@@ -1,0 +1,4 @@
+#	define a new house instance with identifier house1
+definer house house1
+define house house2
+define house house3

@@ -1,0 +1,9 @@
+#	define a new house instance with identifier house1
+define house house1
+define house house2
+define house house3
+
+# 	define a new room instance and attach to a house
+define room kitchen1 floor 1 type kitchen house house1
+define room dining_room1 floor 1 type house house1
+define room closet1 floor 1 type closet  house house1

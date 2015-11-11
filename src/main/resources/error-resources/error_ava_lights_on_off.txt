@@ -1,0 +1,58 @@
+#	define a new house instance with identifier house1
+define house house1
+define house house2
+
+# 	define new room instances and attach to a house
+define room kitchen1 floor 1 type kitchen house house1
+define room dining_room1 floor 1 type dining_room  house house1
+define room dining_room2 floor 1 type dining_room  house house2
+
+# define some lights
+define appliance kitchen1Light1 type light room house1:kitchen1
+define appliance diningRoom1Light1 type light room house1:dining_room1
+define appliance diningRoom1Light2 type light room house1:dining_room1
+
+define appliance diningRoom2Light1 type light room house2:dining_room2
+
+# define some ava devices
+define appliance kitchenAva1 type ava room house1:kitchen1
+define appliance diningRoomAva1 type ava room house1:dining_room1
+define appliance diningRoomAva2 type ava room house1:dining_room1
+
+#	define new occupants
+define occupant joe_smith type adult
+define occupant jill_smith type adult
+define occupant Rover type pet
+define occupant tom_neighbour type adult
+
+#	add joe_smith and others as an occupant to house1
+add occupant joe_smith to_house house1
+add occupant jill_smith to_house house1
+add occupant Rover to_house house1
+
+add occupant tom_neighbour to_house house2
+
+#	create a new sensor in a room
+define sensor kitchenCamera1 type camera room house1:kitchen1
+define sensor diningRoomCamera1 type camera room house1:dining_room1
+define sensor diningRoomCamera2 type camera room house2:dining_room2
+
+# Ava hears Joe Smith say "lights on"
+set appliance house1:kitchen1:kitchenAva1 status LISTENING value "joe_smith says: 'lights on'"
+
+# Ava hears Joe Smith say "lights off"
+set appliance house1:kitchen1:kitchenAva1 status LISTENING value "joe_smith says: 'lights off'"
+
+# diningRoomCamera1 detects jill_smith is entering dining_room1
+set sensor house1:dining_room1:diningRoomCamera1 status OCCUPANT_DETECTED value "jill_smith"
+set sensor house1:dining_room1:diningRoomCamera1 status OCCUPANT_ACTIVE value "jill_smith"
+
+# Ava hears jill_smith say "lights on"
+set appliance house1:dining_room1:diningRoomAva1 status LISTENING value "jill_smith says: 'lights on'"
+
+# Ava hears jill_smith say "lights off"
+set appliance house1:dining_room1:diningRoomAva1 status LISTENING value "jill_smith said: 'lights off'"
+
+# Ava hears Joe Smith say "lights off"
+set appliance house1:kitchen1:kitchenAva1 status LISTENING value "joe_smith says: 'lights off'"
+

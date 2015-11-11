@@ -1,0 +1,40 @@
+#	define a new house instance with identifier house1
+define house house1
+define house house2
+define house house3
+
+# 	define a new room instance and attach to a house
+define room kitchen1 floor 1 type kitchen house house1
+define room dining_room1 floor 1 type dining_room  house house1
+define room closet1 floor 1 type closet  house house1
+define room bed_room1 floor 2 type bedroom house house1
+define room bed_room2 floor 2 type bedroom house house1
+define room bath_room1 floor 2 type bathroom house house1
+
+define room kitchen1 floor 1 type kitchen house house2
+define room dining_room1 floor 1 type dining_room  house house2
+define room closet1 floor 1 type closet  house house2
+define room bed_room1 floor 2 type bedroom house house2 
+define room bed_room2 floor 2 type bedroom house house2
+define room bath_room1 floor 2 type bathroom house house2
+	
+#	define a new occupant
+define occupant joe_smith type adult
+define occupant jill_smith type adult
+define occupant Rover type pet  
+
+define occupant bill_roberts type adult
+define occupant mary_roberts type adult
+define occupant Fuzz type pet  
+
+#	add joe_smith as an occupant to house1
+add occupant joe_smith to_house house11
+add occupant jill_smith to_house house1
+add occupant Rover to_house house1
+
+add occupant bill_roberts to_house house2
+add occupant mary_roberts to_house house2
+add occupant Fuzz to_house house2
+
+#	create a new sensor in a room
+define sensor smoke_detector1 type smoke_detector room house1:kitchen11290
