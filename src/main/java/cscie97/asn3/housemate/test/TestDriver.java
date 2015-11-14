@@ -26,8 +26,8 @@ public class TestDriver {
 
     public static void main(String[] args) throws UnsupportedEncodingException {
         args = new String[1];
-        args[0] = "C:\\Users\\assurana\\Documents\\Ashish\\Harvard\\2015\\CSCIE-97 Software Design\\hw4\\source\\surana\\src\\main\\resources\\hw4\\" +
-                "define_roles.txt";
+        args[0] = "C:\\Users\\assurana\\Documents\\Ashish\\Harvard\\2015\\CSCIE-97 Software Design\\hw4\\source\\surana\\src\\main\\resources\\" +
+                "error-resources\\hw4\\duplicate_permission_id.txt";
 
         if(args == null || args.length == 0){
             printUsage();
