@@ -2,6 +2,7 @@ package cscie97.asn3.housemate.entitlement.factory.impl;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
 import cscie97.asn3.housemate.entitlement.Permission;
+import cscie97.asn3.housemate.entitlement.Role;
 import cscie97.asn3.housemate.entitlement.User;
 import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
 import cscie97.asn3.housemate.entitlement.exception.EntityExistsException;
@@ -25,11 +26,15 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
 
     private final AccessToken adminAccessToken;
 
+    private final Map<String, Role> roles;
+
     public HouseMateEntitlementResourceFactory(){
+        adminAccessToken = new AccessToken(HouseMateEntitlementResourceFactory.class.getName());
+
         users = new HashMap<>();
         accessTokens = new HashMap<>();
         permissions = new HashMap<>();
-        adminAccessToken = new AccessToken(HouseMateEntitlementResourceFactory.class.getName());
+        roles = new HashMap<>();
     }
 
     @Override
@@ -88,7 +93,22 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
 
         permission = new Permission(identifier, name, description);
         permissions.put(identifier, permission);
-        System.out.printf("Created permission with id: '%s' \n", identifier);
+        System.out.printf("Created permission with id: '%s', name: '%s', description: '%s' \n",
+                identifier, name, description);
+    }
+
+    @Override
+    public void createRole(String identifier, String name, String description) throws EntityExistsException {
+        Role role = roles.get(identifier);
+
+        if(role != null){
+            throw new EntityExistsException(role);
+        }
+
+        role = new Role(identifier, name, description);
+        roles.put(identifier, role);
+        System.out.printf("Created role with id: '%s', name: '%s', description: '%s' \n",
+                identifier, name, description);
     }
 
     public Permission getPermission(String identifier) throws EntityNotFoundException {

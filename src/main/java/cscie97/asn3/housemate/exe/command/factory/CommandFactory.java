@@ -3,6 +3,7 @@ package cscie97.asn3.housemate.exe.command.factory;
 import cscie97.asn3.housemate.entitlement.AccessToken;
 import cscie97.asn3.housemate.exe.command.Command;
 import cscie97.asn3.housemate.exe.command.entitlement.PermissionCommand;
+import cscie97.asn3.housemate.exe.command.entitlement.RoleCommand;
 import cscie97.asn3.housemate.exe.command.model.*;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
 
@@ -67,6 +68,8 @@ public class CommandFactory {
             //start of entitlement service commands
             case "define permission":
                 return new PermissionCommand(accessToken);
+            case "define role":
+                return new RoleCommand(accessToken);
             default:
                 return null;
         }

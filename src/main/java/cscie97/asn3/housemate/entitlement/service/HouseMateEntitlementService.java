@@ -20,4 +20,6 @@ public interface HouseMateEntitlementService {
     public AccessToken getAdminAccessToken();
 
     public void createPermission(String permissionId, String permissionName, String permissionDescription) throws EntityExistsException;
+
+    public void createRole(String identifier, String name, String description) throws EntityExistsException;
 }

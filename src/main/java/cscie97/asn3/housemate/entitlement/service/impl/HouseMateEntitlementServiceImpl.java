@@ -85,4 +85,9 @@ public class HouseMateEntitlementServiceImpl implements HouseMateEntitlementServ
     public void createPermission(String permissionId, String permissionName, String permissionDescription) throws EntityExistsException {
         resourceFactory.createPermission(permissionId, permissionName, permissionDescription);
     }
+
+    @Override
+    public void createRole(String identifier, String name, String description) throws EntityExistsException {
+        resourceFactory.createRole(identifier, name, description);
+    }
 }
