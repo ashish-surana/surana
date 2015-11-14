@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by assurana on 11/3/2015.
+ * This class represents a permission in the HouseMate automation system.
  */
 public class Permission extends Entitlement{
 
@@ -15,9 +15,7 @@ public class Permission extends Entitlement{
 
     private final String description;
 
-    private static final Map<String, Permission> PERMISSIONS_CACHE = new HashMap<>();
-
-    private Permission(String identifier, String name, String description) {
+    public Permission(String identifier, String name, String description) {
         super(identifier);
 
         assert name!= null && !"".equals(name) : "Permission name cannot be null or empty string";
@@ -25,23 +23,6 @@ public class Permission extends Entitlement{
 
         this.description = description;
         this.name = name;
-
-        PERMISSIONS_CACHE.put(identifier, this);
-    }
-
-    public static Permission getById(String identifier){
-        return PERMISSIONS_CACHE.get(identifier);
-    }
-
-    public static Permission create(String identifier, String name, String description) throws EntityExistsException {
-        Permission permission = getById(identifier);
-
-        if (permission != null){
-            throw new EntityExistsException(permission);
-        }
-
-        permission = new Permission(identifier, name, description);
-        return permission;
     }
 
     @Override

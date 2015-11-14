@@ -1,13 +1,18 @@
 package cscie97.asn3.housemate.entitlement;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
- * Created by assurana on 11/3/2015.
+ * This class represents a role in the HouseMate automation system.
  */
 public class Role extends Entitlement{
 
     private final String name;
 
     private final String description;
+
+    private final Set<Entitlement> entitlements;
 
     public Role(String identifier, String name, String description) {
         super(identifier);
@@ -17,5 +22,23 @@ public class Role extends Entitlement{
 
         this.description = description;
         this.name = name;
+        this.entitlements = new HashSet<>();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void addEntitlement(Entitlement entitlement){
+        entitlements.add(entitlement);
+    }
+
+    @Override
+    public String getIdentifier() {
+        return super.getIdentifier();
     }
 }
