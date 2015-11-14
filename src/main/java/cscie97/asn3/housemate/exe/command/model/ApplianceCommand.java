@@ -1,39 +1,38 @@
-package cscie97.asn3.housemate.model.service.exe;
+package cscie97.asn3.housemate.exe.command.model;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
-import cscie97.asn3.housemate.model.service.exception.InvalidEntityTypeException;
-import cscie97.asn3.housemate.model.support.DeviceType;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
-import cscie97.asn3.housemate.model.service.exe.util.CommandParser;
+import cscie97.asn3.housemate.model.service.exception.InvalidEntityTypeException;
+import cscie97.asn3.housemate.exe.util.CommandParser;
+import cscie97.asn3.housemate.model.support.DeviceType;
 
 /**
  *
  */
-public class SensorCommand extends DeviceCommand {
+public class ApplianceCommand extends DeviceCommand{
 
     private static final String TYPE = "type";
     private static final String ROOM = "room";
 
-    public SensorCommand(AccessToken accessToken) {
+    public ApplianceCommand(AccessToken accessToken) {
         super(accessToken);
     }
 
     @Override
     protected void executeDefineCommand(CommandParser commandParser) throws InvalidCommandException, EntityExistsException, EntityNotFoundException, InvalidEntityTypeException {
-        //define sensor smoke_detector1 type smoke_detector room house1:kitchen1
-        assert commandParser!=null : "Command parser cannot be null";
+        assert commandParser != null : "Command parser cannot be null";
 
-        commandParser.ensureNextToken(SENSOR);
-        String sensorId = commandParser.getNextToken("Sensor identifier");
+        commandParser.ensureNextToken(APPLIANCE);
+
+        String applianceId = commandParser.getNextToken("Appliance identifier");
 
         commandParser.ensureNextToken(TYPE);
+        String applianceTypeString = commandParser.getNextToken("Appliance type").toLowerCase();
 
-        String sensorTypeString = commandParser.getNextToken("Sensor type").toLowerCase();
-
-        if(!DeviceType.isValidSensorType(sensorTypeString)){
-            throw new InvalidCommandException(commandParser.getInputCommand(), "Unrecognized sensor type: '"+sensorTypeString+"'");
+        if(!DeviceType.isValidApplianceType(applianceTypeString)){
+            throw new InvalidCommandException(commandParser.getInputCommand(), "Unrecognized appliance type: '"+applianceTypeString+"'");
         }
 
         commandParser.ensureNextToken(ROOM);
@@ -51,6 +50,7 @@ public class SensorCommand extends DeviceCommand {
         String houseId = identifiers[0];
         String roomId = identifiers[1];
 
-        service.defineSensor(accessToken, houseId, roomId, sensorTypeString, sensorId);
+        service.defineAppliance(accessToken, houseId, roomId, applianceTypeString, applianceId);
     }
+
 }

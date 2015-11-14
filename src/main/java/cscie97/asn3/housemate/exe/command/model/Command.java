@@ -1,9 +1,9 @@
-package cscie97.asn3.housemate.model.service.exe;
+package cscie97.asn3.housemate.exe.command.model;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
 import cscie97.asn3.housemate.model.service.HouseMateModelService;
 import cscie97.asn3.housemate.model.service.exception.*;
-import cscie97.asn3.housemate.model.service.exe.util.CommandParser;
+import cscie97.asn3.housemate.exe.util.CommandParser;
 import cscie97.asn3.housemate.model.service.factory.HouseMateModelServiceFactory;
 
 /**

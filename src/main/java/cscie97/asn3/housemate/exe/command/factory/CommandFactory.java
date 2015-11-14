@@ -1,15 +1,11 @@
-package cscie97.asn3.housemate.model.service.exe.registry;
+package cscie97.asn3.housemate.exe.command.factory;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.exe.command.model.*;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
-import cscie97.asn3.housemate.model.service.exe.*;
-
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * This class provides a mechanism to create appropriate {@link Command} for the input command string.
+ * This class provides a mechanism to create appropriate {@link cscie97.asn3.housemate.exe.command.model.Command} for the input command string.
  */
 public class CommandFactory {
 

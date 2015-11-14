@@ -1,4 +1,4 @@
-package cscie97.asn3.housemate.model.service.exe.util;
+package cscie97.asn3.housemate.exe.util;
 
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
 

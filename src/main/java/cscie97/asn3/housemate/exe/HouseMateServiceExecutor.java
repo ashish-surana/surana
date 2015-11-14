@@ -1,18 +1,19 @@
-package cscie97.asn3.housemate.model.service.exe;
+package cscie97.asn3.housemate.exe;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.exe.command.model.Command;
 import cscie97.asn3.housemate.model.service.exception.*;
-import cscie97.asn3.housemate.model.service.exe.registry.CommandFactory;
+import cscie97.asn3.housemate.exe.command.factory.CommandFactory;
 
 import java.io.*;
 
 /**
- * This class executes commands against HouseMateModelService by either reading the commands from
+ * This class executes commands against HouseMateModelService and HouseMateEntitlementService by either reading the commands from
  * an input file, or one command at a time.
- * This class looks up the appropriate {@link cscie97.asn3.housemate.model.service.exe.Command} by using
+ * This class looks up the appropriate {@link cscie97.asn3.housemate.exe.command.model.Command} by using
  * CommandRegistry, and invokes it.
  */
-public class HouseMateModelServiceExecutor {
+public class HouseMateServiceExecutor {
 
 
     public void executeFile(String fileName) throws InvalidBulkCommandException,

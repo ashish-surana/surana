@@ -2,10 +2,9 @@ package cscie97.asn3.housemate.test;
 
 import cscie97.asn3.housemate.core.init.StartUpService;
 import cscie97.asn3.housemate.model.service.exception.*;
-import cscie97.asn3.housemate.model.service.exe.HouseMateModelServiceExecutor;
+import cscie97.asn3.housemate.exe.HouseMateServiceExecutor;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 
 /**
  * This class is a test driver for {@link cscie97.asn3.housemate.model.service.HouseMateModelService}.
@@ -25,7 +24,7 @@ public class TestDriver {
         }
         StartUpService.init();
         String configFilePath = args[0];
-        HouseMateModelServiceExecutor executor = new HouseMateModelServiceExecutor();
+        HouseMateServiceExecutor executor = new HouseMateServiceExecutor();
         try {
             executor.executeFile(configFilePath);
         }catch (InvalidBulkCommandException e) {

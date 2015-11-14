@@ -1,10 +1,10 @@
-package cscie97.asn3.housemate.model.service.exe;
+package cscie97.asn3.housemate.exe.command.model;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
 import cscie97.asn3.housemate.model.service.exception.InvalidStatusException;
-import cscie97.asn3.housemate.model.service.exe.util.CommandParser;
+import cscie97.asn3.housemate.exe.util.CommandParser;
 
 import static cscie97.asn3.housemate.model.sensor.Camera.*;
 import static cscie97.asn3.housemate.model.appliance.Ava.*;
