@@ -1,6 +1,7 @@
 package cscie97.asn3.housemate.exe.command.model;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.exe.command.Command;
 import cscie97.asn3.housemate.model.support.OccupantType;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
@@ -39,7 +40,7 @@ public class OccupantCommand extends Command {
         }
 
         commandParser.ensureTermination();
-        service.defineOccupant(accessToken, occupantId, occupantType);
+        modelService.defineOccupant(accessToken, occupantId, occupantType);
     }
 
     @Override
@@ -55,6 +56,6 @@ public class OccupantCommand extends Command {
         String houseId = commandParser.getNextToken("House identifier");
 
         commandParser.ensureTermination();
-        service.addOccupant(accessToken, occupantId, houseId);
+        modelService.addOccupant(accessToken, occupantId, houseId);
     }
 }

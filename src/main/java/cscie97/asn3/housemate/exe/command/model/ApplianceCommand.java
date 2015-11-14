@@ -50,7 +50,7 @@ public class ApplianceCommand extends DeviceCommand{
         String houseId = identifiers[0];
         String roomId = identifiers[1];
 
-        service.defineAppliance(accessToken, houseId, roomId, applianceTypeString, applianceId);
+        modelService.defineAppliance(accessToken, houseId, roomId, applianceTypeString, applianceId);
     }
 
 }

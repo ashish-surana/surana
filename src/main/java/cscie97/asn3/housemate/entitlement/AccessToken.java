@@ -2,25 +2,25 @@ package cscie97.asn3.housemate.entitlement;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 
 /**
  * Created by assurana on 11/3/2015.
  */
-public class AccessToken {
+public class AccessToken extends Entity{
 
-    private static final int INACTIVE_TIME_OUT_MILLIS = 60 * 1000;
+    private static final int INACTIVE_TIME_OUT_MILLIS = 60 * 60* 1000;
 
     private Date lastAccessed;
 
     private final long expiryTime;
 
-    private final String identifier;
+    public AccessToken(String userId){
+        super(UUID.randomUUID().toString());
 
-    public AccessToken(String identifier){
-        assert identifier!= null && !"".equals(identifier) : "Access token identifier cannot be null or empty string";
+        assert userId!= null && !"".equals(userId) : "User identifier cannot be null or empty string";
 
-        this.identifier = identifier;
         setLastAccessed();
 
         Calendar calendar = Calendar.getInstance();
@@ -28,9 +28,10 @@ public class AccessToken {
         expiryTime = calendar.getTimeInMillis();
     }
 
+    @Override
     public String getIdentifier() {
         setLastAccessed();
-        return identifier;
+        return super.getIdentifier();
     }
 
     private void setLastAccessed() {

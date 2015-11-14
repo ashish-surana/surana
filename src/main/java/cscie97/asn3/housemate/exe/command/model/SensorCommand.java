@@ -51,6 +51,6 @@ public class SensorCommand extends DeviceCommand {
         String houseId = identifiers[0];
         String roomId = identifiers[1];
 
-        service.defineSensor(accessToken, houseId, roomId, sensorTypeString, sensorId);
+        modelService.defineSensor(accessToken, houseId, roomId, sensorTypeString, sensorId);
     }
 }

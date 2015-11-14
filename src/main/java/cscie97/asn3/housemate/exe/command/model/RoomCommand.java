@@ -1,6 +1,7 @@
 package cscie97.asn3.housemate.exe.command.model;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.exe.command.Command;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
 import cscie97.asn3.housemate.model.support.RoomType;
@@ -49,7 +50,7 @@ public class RoomCommand extends Command {
 
         commandParser.ensureTermination();
 
-        service.defineRoom(null, houseId, roomId, roomType, floorNumber);
+        modelService.defineRoom(null, houseId, roomId, roomType, floorNumber);
     }
 
 

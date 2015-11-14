@@ -1,37 +1,46 @@
 package cscie97.asn3.housemate.exe.command.factory;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.exe.command.Command;
+import cscie97.asn3.housemate.exe.command.entitlement.PermissionCommand;
 import cscie97.asn3.housemate.exe.command.model.*;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
 
 /**
- * This class provides a mechanism to create appropriate {@link cscie97.asn3.housemate.exe.command.model.Command} for the input command string.
+ * This class provides a mechanism to create appropriate {@link cscie97.asn3.housemate.exe.command.Command} for the input command string.
  */
 public class CommandFactory {
 
-    private CommandFactory(){
+    public CommandFactory(){
 
     }
 
     /**
      * Looks up an appropriate command to fulfill baseCommand.
-     * @param baseCommand
+     * @param inputCommand
      * @return
      * @throws InvalidCommandException If no appropriate command is found for fulfilling the baseCommand.
      */
-    public static Command createCommand(AccessToken accessToken, String baseCommand) throws InvalidCommandException {
-        assert baseCommand!=null && !"".equals(baseCommand) : "Input command cannot be null or empty string.";
+    public Command createCommand(AccessToken accessToken, String inputCommand) throws InvalidCommandException {
+        assert inputCommand!=null && !"".equals(inputCommand) : "Input command cannot be null or empty string.";
 
-        Command command = getCommand(accessToken, baseCommand);
+        Command command = getCommand(accessToken, inputCommand);
 
         if(command == null){
-            throw new InvalidCommandException(baseCommand, "Unrecognized command: '"+baseCommand+"'");
+            throw new InvalidCommandException(inputCommand, "Unrecognized command: '"+inputCommand+"'");
         }
 
         return command;
     }
 
-    private static Command getCommand(AccessToken accessToken, final String baseCommand) {
+    private static Command getCommand(AccessToken accessToken, final String inputCommand) {
+        String[] commandArray = inputCommand.split(" ", 2);
+
+        String operation = commandArray[0];
+        String operand = commandArray[1].trim().split(" ", 2)[0];
+
+        String baseCommand = operation + " " + operand;
+
         switch (baseCommand){
             case "define house":
                 return new HouseCommand(accessToken);
@@ -55,6 +64,9 @@ public class CommandFactory {
                 return new ApplianceCommand(accessToken);
             case "show configuration":
                 return new ConfigurationCommand(accessToken);
+            //start of entitlement service commands
+            case "define permission":
+                return new PermissionCommand(accessToken);
             default:
                 return null;
         }

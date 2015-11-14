@@ -2,6 +2,7 @@ package cscie97.asn3.housemate.exe.command.model;
 
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.exe.command.Command;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
 import cscie97.asn3.housemate.exe.util.CommandParser;
@@ -26,12 +27,12 @@ public class ConfigurationCommand extends Command {
         String entityType =  commandParser.safeGetNextToken();
 
         if(entityType == null){
-            service.showConfiguration(accessToken);
+            modelService.showConfiguration(accessToken);
         }else if(HOUSE.equals(entityType)){
             String houseId = commandParser.getNextToken("House identifier");
             commandParser.ensureTermination();
 
-            service.showHouseConfiguration(accessToken, houseId);
+            modelService.showHouseConfiguration(accessToken, houseId);
         }
         else if(ROOM.equals(entityType)){
             String houseAndRoomId = commandParser.getNextToken("House identifier: Room identifier");
@@ -47,7 +48,7 @@ public class ConfigurationCommand extends Command {
             String houseId = identifiers[0];
             String roomId = identifiers[1];
 
-            service.showRoomConfiguration(accessToken, houseId, roomId);
+            modelService.showRoomConfiguration(accessToken, houseId, roomId);
         }
     }
 }

@@ -1,6 +1,7 @@
 package cscie97.asn3.housemate.exe.command.model;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.exe.command.Command;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
 import cscie97.asn3.housemate.exe.util.CommandParser;
@@ -25,7 +26,7 @@ public class HouseCommand extends Command {
 
         commandParser.ensureTermination();
 
-        service.defineHouse(null, houseId);
+        modelService.defineHouse(null, houseId);
     }
 
 }

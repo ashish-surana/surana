@@ -1,9 +1,15 @@
-package cscie97.asn3.housemate.exe.command.model;
+package cscie97.asn3.housemate.exe.command;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.*;
+import cscie97.asn3.housemate.entitlement.service.HouseMateEntitlementService;
+import cscie97.asn3.housemate.entitlement.service.factory.HouseMateEntitlementServiceFactory;
 import cscie97.asn3.housemate.model.service.HouseMateModelService;
 import cscie97.asn3.housemate.model.service.exception.*;
 import cscie97.asn3.housemate.exe.util.CommandParser;
+import cscie97.asn3.housemate.model.service.exception.EntityException;
+import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
+import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
 import cscie97.asn3.housemate.model.service.factory.HouseMateModelServiceFactory;
 
 /**
@@ -14,9 +20,11 @@ import cscie97.asn3.housemate.model.service.factory.HouseMateModelServiceFactory
  */
 public abstract class Command {
 
-    HouseMateModelService service = new HouseMateModelServiceFactory().getService();
+    protected HouseMateModelService modelService = new HouseMateModelServiceFactory().getService();
 
-    final AccessToken accessToken;
+    protected HouseMateEntitlementService entitlementService = new HouseMateEntitlementServiceFactory().getService();
+
+    protected final AccessToken accessToken;
 
     public Command(AccessToken accessToken){
         assert accessToken != null : "Access token cannot be null";
@@ -25,7 +33,7 @@ public abstract class Command {
         this.accessToken = accessToken;
     }
 
-    public void execute(String inputCommand) throws InvalidCommandException, EntityException {
+    public void execute(String inputCommand) throws InvalidCommandException, EntityException, cscie97.asn3.housemate.entitlement.exception.EntityException {
         assert inputCommand!= null && !"".equals(inputCommand) :
                 "Input command cannot be null or empty string";
 
@@ -65,7 +73,7 @@ public abstract class Command {
         throw new InvalidCommandException(commandParser.getInputCommand(), "Unsupported command");
     }
 
-    protected void executeDefineCommand(CommandParser commandParser) throws InvalidCommandException, EntityExistsException, EntityNotFoundException, InvalidEntityTypeException {
+    protected void executeDefineCommand(CommandParser commandParser) throws InvalidCommandException, EntityExistsException, EntityNotFoundException, InvalidEntityTypeException, cscie97.asn3.housemate.entitlement.exception.EntityExistsException {
         throw new InvalidCommandException(commandParser.getInputCommand(), "Unsupported command");
     }
 

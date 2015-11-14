@@ -1,6 +1,7 @@
 package cscie97.asn3.housemate.exe.command.model;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.exe.command.Command;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
 import cscie97.asn3.housemate.model.service.exception.InvalidStatusException;
@@ -12,7 +13,7 @@ import static cscie97.asn3.housemate.model.appliance.Ava.*;
 /**
  *
  */
-public class DeviceCommand extends Command{
+public class DeviceCommand extends Command {
 
     protected static final String APPLIANCE = "appliance";
     protected static final String SENSOR = "sensor";
@@ -62,7 +63,7 @@ public class DeviceCommand extends Command{
 
         commandParser.ensureTermination();
 
-        service.setDeviceStatus(accessToken, houseId, roomId, deviceId, statusKey, statusValue);
+        modelService.setDeviceStatus(accessToken, houseId, roomId, deviceId, statusKey, statusValue);
     }
 
     @Override
@@ -86,7 +87,7 @@ public class DeviceCommand extends Command{
         String status = commandParser.safeGetNextToken();
         if(status == null){
             commandParser.ensureTermination();
-            service.showDeviceStatus(accessToken, houseId, roomId, deviceId);
+            modelService.showDeviceStatus(accessToken, houseId, roomId, deviceId);
             return;
         }
 
@@ -97,6 +98,6 @@ public class DeviceCommand extends Command{
 
         String statusKey = commandParser.getNextToken("Device status key");
         commandParser.ensureTermination();
-        service.showDeviceStatus(accessToken, houseId, roomId, deviceId, statusKey);
+        modelService.showDeviceStatus(accessToken, houseId, roomId, deviceId, statusKey);
     }
 }

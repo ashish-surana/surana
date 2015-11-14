@@ -113,4 +113,24 @@ public abstract class Credential {
             throw new AuthenticationException(userId, "Invalid user id or password");
         }
     }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof  Credential)){
+            return false;
+        }
+
+        Credential otherCred = (Credential) obj;
+
+        //Two credentials are equal if they belong to the same user,
+        //and their encrypted values and salts are equal.
+        return (this.getUserId().equals(otherCred.getUserId())
+            && this.encryptedCredential.equals(otherCred.encryptedCredential)
+                && this.salt.equals(otherCred.salt)
+        );
+    }
 }

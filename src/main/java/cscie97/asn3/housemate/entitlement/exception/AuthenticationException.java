@@ -5,11 +5,14 @@ package cscie97.asn3.housemate.entitlement.exception;
  */
 public class AuthenticationException extends EntitlementServiceException {
 
-    public AuthenticationException(Exception exception) {
-        super(exception);
-    }
+    private String userId;
 
     public AuthenticationException(String userId, String message) {
         super(message);
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

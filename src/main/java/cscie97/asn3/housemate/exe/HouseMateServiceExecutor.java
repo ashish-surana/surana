@@ -1,19 +1,33 @@
 package cscie97.asn3.housemate.exe;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
-import cscie97.asn3.housemate.exe.command.model.Command;
+import cscie97.asn3.housemate.entitlement.exception.*;
+import cscie97.asn3.housemate.exe.command.Command;
 import cscie97.asn3.housemate.model.service.exception.*;
 import cscie97.asn3.housemate.exe.command.factory.CommandFactory;
+import cscie97.asn3.housemate.model.service.exception.EntityException;
+import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
+import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
 
 import java.io.*;
 
 /**
  * This class executes commands against HouseMateModelService and HouseMateEntitlementService by either reading the commands from
  * an input file, or one command at a time.
- * This class looks up the appropriate {@link cscie97.asn3.housemate.exe.command.model.Command} by using
+ * This class looks up the appropriate {@link cscie97.asn3.housemate.exe.command.Command} by using
  * CommandRegistry, and invokes it.
  */
 public class HouseMateServiceExecutor {
+
+    private final AccessToken accessToken;
+    private final CommandFactory commandFactory;
+
+    public HouseMateServiceExecutor(AccessToken accessToken){
+        assert accessToken != null : "AccessToken cannot be null";
+
+        this.accessToken = accessToken;
+        this.commandFactory = new CommandFactory();
+    }
 
 
     public void executeFile(String fileName) throws InvalidBulkCommandException,
@@ -54,6 +68,11 @@ public class HouseMateServiceExecutor {
                     message += "'. Error message is: '"+ e.getMessage()+"'.";
                     message += " Command was read from file: '" + fileName + "' at line :" + lineNum + ".";
                     System.err.println(message);
+                } catch (cscie97.asn3.housemate.entitlement.exception.EntityException e) {
+                    String message = "Error executing a command on entity: '"+ e.getEntity();
+                    message += "'. Error message is: '"+ e.getMessage()+"'.";
+                    message += " Command was read from file: '" + fileName + "' at line :" + lineNum + ".";
+                    System.err.println(message);
                 }
             }
         }catch (FileNotFoundException e){
@@ -73,7 +92,7 @@ public class HouseMateServiceExecutor {
         }
     }
 
-    public void execute(String inputCommand) throws InvalidCommandException, EntityException {
+    public void execute(String inputCommand) throws InvalidCommandException, EntityException, cscie97.asn3.housemate.entitlement.exception.EntityException {
         if(inputCommand == null){
             throw new InvalidCommandException("Command cannot be null", inputCommand);
         }
@@ -84,16 +103,7 @@ public class HouseMateServiceExecutor {
             return;
         }
 
-        AccessToken accessToken = null;
-
-        String[] commandArray = inputCommand.split(" ", 2);
-
-        String operation = commandArray[0];
-        String operand = commandArray[1].trim().split(" ", 2)[0];
-
-        String baseCommand = operation + " " + operand;
-
-        Command command = CommandFactory.createCommand(accessToken, baseCommand);
+        Command command = commandFactory.createCommand(accessToken, inputCommand);
         command.execute(inputCommand);
     }
 }
