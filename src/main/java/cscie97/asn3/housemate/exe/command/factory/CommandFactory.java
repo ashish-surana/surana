@@ -69,6 +69,7 @@ public class CommandFactory {
             case "define permission":
                 return new PermissionCommand(accessToken);
             case "define role":
+            case "add entitlement_to_role":
                 return new RoleCommand(accessToken);
             default:
                 return null;

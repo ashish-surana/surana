@@ -1,0 +1,7 @@
+# define roles
+# define role <role_id> <role_name> <role_description>
+define role adult_resident "Adult Resident Role" "Has all permissions of an adult resident"
+
+# add entitlement (permission role ) to role
+# add entitlement_to_role <role_id> <entitlement_id>
+add entitlement_to_role adult_resident adult_resident

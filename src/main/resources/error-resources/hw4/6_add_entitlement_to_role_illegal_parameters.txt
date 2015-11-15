@@ -1,0 +1,18 @@
+# define permissions
+# define permission <permission_id> <permission_name> <permission_description>
+define permission admin_permission "User Administrator" "Create Update Delete Users, Resources, and all other Entitlement domain objects"
+
+# define roles
+# define role <role_id> <role_name> <role_description>
+define role adult_resident "Adult Resident Role" "Has all permissions of an adult resident"
+
+# add entitlement (permission role ) to role
+# add entitlement_to_role <role_id> <entitlement_id>
+#Omit role id or permission id
+add entitlement_to_role admin_role
+
+#Pass additional parameters
+add entitlement_to_role admin_role control_oven 12 34 435
+
+#Make sure that remaining commands execute.
+add entitlement_to_role adult_resident admin_permission

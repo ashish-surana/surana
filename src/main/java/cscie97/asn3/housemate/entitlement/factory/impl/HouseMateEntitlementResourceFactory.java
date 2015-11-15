@@ -1,9 +1,6 @@
 package cscie97.asn3.housemate.entitlement.factory.impl;
 
-import cscie97.asn3.housemate.entitlement.AccessToken;
-import cscie97.asn3.housemate.entitlement.Permission;
-import cscie97.asn3.housemate.entitlement.Role;
-import cscie97.asn3.housemate.entitlement.User;
+import cscie97.asn3.housemate.entitlement.*;
 import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
 import cscie97.asn3.housemate.entitlement.exception.EntityExistsException;
 import cscie97.asn3.housemate.entitlement.exception.EntityNotFoundException;
@@ -86,8 +83,9 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
     @Override
     public void createPermission(String identifier, String name, String description) throws EntityExistsException {
         Permission permission = permissions.get(identifier);
+        Role role = roles.get(identifier);
 
-        if (permission != null){
+        if (permission != null || role != null){
             throw new EntityExistsException(permission);
         }
 
@@ -100,8 +98,8 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
     @Override
     public void createRole(String identifier, String name, String description) throws EntityExistsException {
         Role role = roles.get(identifier);
-
-        if(role != null){
+        Permission permission = permissions.get(identifier);
+        if(role != null || permission != null){
             throw new EntityExistsException(role);
         }
 
@@ -109,6 +107,30 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
         roles.put(identifier, role);
         System.out.printf("Created role with id: '%s', name: '%s', description: '%s' \n",
                 identifier, name, description);
+    }
+
+    @Override
+    public Role getRole(String roleId) throws EntityNotFoundException {
+        Role role = roles.get(roleId);
+
+        if(role == null){
+            throw new EntityNotFoundException(roleId);
+        }
+
+        return role;
+    }
+
+    @Override
+    public Entitlement getEntitlement(String entitlementId) throws EntityNotFoundException {
+        try{
+            //first look up the entitlement as a role, then as a permission.
+            //throw an exception, if it is neither a role, nor a permission.
+            Entitlement entitlement = getRole(entitlementId);
+            return entitlement;
+        } catch (EntityNotFoundException e) {
+            Entitlement entitlement = getPermission(entitlementId);
+            return entitlement;
+        }
     }
 
     public Permission getPermission(String identifier) throws EntityNotFoundException {

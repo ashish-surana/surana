@@ -1,0 +1,13 @@
+# define permissions
+# define permission <permission_id> <permission_name> <permission_description>
+#Omit permission id
+define permission "User Administrator" "Create Update Delete Users, Resources, and all other Entitlement domain objects"
+
+#Omit permission name, or description
+define permission control_oven "Full Control of Oven"
+
+#Add additional parameters
+define permission control_thermostat "Control Thermostat" "Full control of thermostat" "Additional Param"
+
+#Make sure that remaining commands in this file get executed.
+define permission control_window "Control Window" "Full Control of Window"

@@ -73,6 +73,11 @@ public class HouseMateServiceExecutor {
                     message += "'. Error message is: '"+ e.getMessage()+"'.";
                     message += " Command was read from file: '" + fileName + "' at line :" + lineNum + ".";
                     System.err.println(message);
+                } catch (EntitlementServiceException e) {
+                    String message = "Error executing a command. ";
+                    message += "Error message is: '"+ e.getMessage()+"'.";
+                    message += " Command was read from file: '" + fileName + "' at line :" + lineNum + ".";
+                    System.err.println(message);
                 }
             }
         }catch (FileNotFoundException e){
@@ -92,7 +97,7 @@ public class HouseMateServiceExecutor {
         }
     }
 
-    public void execute(String inputCommand) throws InvalidCommandException, EntityException, cscie97.asn3.housemate.entitlement.exception.EntityException {
+    public void execute(String inputCommand) throws InvalidCommandException, EntityException, EntitlementServiceException {
         if(inputCommand == null){
             throw new InvalidCommandException("Command cannot be null", inputCommand);
         }

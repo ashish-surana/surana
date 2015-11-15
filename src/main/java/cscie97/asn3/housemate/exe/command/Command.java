@@ -33,7 +33,7 @@ public abstract class Command {
         this.accessToken = accessToken;
     }
 
-    public void execute(String inputCommand) throws InvalidCommandException, EntityException, cscie97.asn3.housemate.entitlement.exception.EntityException {
+    public void execute(String inputCommand) throws InvalidCommandException, EntityException, EntitlementServiceException {
         assert inputCommand!= null && !"".equals(inputCommand) :
                 "Input command cannot be null or empty string";
 
@@ -65,7 +65,7 @@ public abstract class Command {
         throw new InvalidCommandException(commandParser.getInputCommand(), "Unsupported command");
     }
 
-    protected void executeAddCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, EntityExistsException {
+    protected void executeAddCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, EntityExistsException, EntitlementServiceException {
         throw new InvalidCommandException(commandParser.getInputCommand(), "Unsupported command");
     }
 

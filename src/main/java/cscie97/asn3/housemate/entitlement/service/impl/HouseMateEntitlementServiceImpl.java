@@ -1,6 +1,8 @@
 package cscie97.asn3.housemate.entitlement.service.impl;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.Entitlement;
+import cscie97.asn3.housemate.entitlement.Role;
 import cscie97.asn3.housemate.entitlement.User;
 import cscie97.asn3.housemate.entitlement.credential.PasswordCredential;
 import cscie97.asn3.housemate.entitlement.credential.VoicePrintCredential;
@@ -89,5 +91,18 @@ public class HouseMateEntitlementServiceImpl implements HouseMateEntitlementServ
     @Override
     public void createRole(String identifier, String name, String description) throws EntityExistsException {
         resourceFactory.createRole(identifier, name, description);
+    }
+
+    @Override
+    public void addEntitlementToRole(String roleId, String entitlementId) throws EntitlementServiceException {
+        Role role = resourceFactory.getRole(roleId);
+        Entitlement entitlement = resourceFactory.getEntitlement(entitlementId);
+
+        if(roleId.equals(entitlementId)){
+            throw new EntitlementServiceException("Cannot add a role to itself. Offending role is: '" + roleId + "'");
+        }
+
+        role.addEntitlement(entitlement);
+        System.out.printf("Added entitlement: '%s' to role '%s' \n", entitlementId, roleId);
     }
 }
