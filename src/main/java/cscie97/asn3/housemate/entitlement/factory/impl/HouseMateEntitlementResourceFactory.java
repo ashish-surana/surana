@@ -50,6 +50,7 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
             throw new EntityExistsException(user);
         }
 
+        user = new User(userId, userName);
         users.put(userId, user);
     }
 
@@ -91,8 +92,6 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
 
         permission = new Permission(identifier, name, description);
         permissions.put(identifier, permission);
-        System.out.printf("Created permission with id: '%s', name: '%s', description: '%s' \n",
-                identifier, name, description);
     }
 
     @Override
@@ -105,8 +104,6 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
 
         role = new Role(identifier, name, description);
         roles.put(identifier, role);
-        System.out.printf("Created role with id: '%s', name: '%s', description: '%s' \n",
-                identifier, name, description);
     }
 
     @Override

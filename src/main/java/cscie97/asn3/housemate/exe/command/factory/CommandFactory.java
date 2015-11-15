@@ -4,6 +4,7 @@ import cscie97.asn3.housemate.entitlement.AccessToken;
 import cscie97.asn3.housemate.exe.command.Command;
 import cscie97.asn3.housemate.exe.command.entitlement.PermissionCommand;
 import cscie97.asn3.housemate.exe.command.entitlement.RoleCommand;
+import cscie97.asn3.housemate.exe.command.entitlement.UserCommand;
 import cscie97.asn3.housemate.exe.command.model.*;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
 
@@ -71,6 +72,8 @@ public class CommandFactory {
             case "define role":
             case "add entitlement_to_role":
                 return new RoleCommand(accessToken);
+            case "create user":
+                return new UserCommand(accessToken);
             default:
                 return null;
         }

@@ -1,0 +1,10 @@
+# create user
+# create user <user_id> <user_name>
+
+create user sam "Sam"
+
+#Create another user with sam(e) id
+create user sam "Sam Again"
+
+#Make sure that remaining commands get executed.
+create user debra "Debra Smart"

@@ -35,6 +35,7 @@ public class HouseMateEntitlementServiceImpl implements HouseMateEntitlementServ
 
     public void createUser(String userId, String userName) throws EntitlementServiceException, EntityExistsException {
         resourceFactory.createUser(userId, userName);
+        System.out.printf("Created user with id: '%s' and name: '%s'.\n", userId, userName);
     }
 
     public AccessToken login(VoicePrintCredential proposedCredential) throws EntitlementServiceException, EntityNotFoundException, AuthenticationException {
@@ -86,11 +87,15 @@ public class HouseMateEntitlementServiceImpl implements HouseMateEntitlementServ
     @Override
     public void createPermission(String permissionId, String permissionName, String permissionDescription) throws EntityExistsException {
         resourceFactory.createPermission(permissionId, permissionName, permissionDescription);
+        System.out.printf("Created permission with id: '%s', name: '%s', description: '%s' \n",
+                permissionId, permissionName, permissionDescription);
     }
 
     @Override
     public void createRole(String identifier, String name, String description) throws EntityExistsException {
         resourceFactory.createRole(identifier, name, description);
+        System.out.printf("Created role with id: '%s', name: '%s', description: '%s' \n",
+                identifier, name, description);
     }
 
     @Override

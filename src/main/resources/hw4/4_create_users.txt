@@ -1,0 +1,5 @@
+# create user
+# create user <user_id> <user_name>
+create user sam "Sam"
+create user jimmy "Jimmy"
+create user debra "Debra Smart"

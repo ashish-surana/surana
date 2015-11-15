@@ -54,6 +54,9 @@ public abstract class Command {
             case "set":
                 executeSetCommand(commandParser);
                 break;
+            case "create":
+                executeCreateCommand(commandParser);
+                break;
             default:
                 throw new InvalidCommandException(inputCommand, "Unrecognized command");
 
@@ -77,4 +80,7 @@ public abstract class Command {
         throw new InvalidCommandException(commandParser.getInputCommand(), "Unsupported command");
     }
 
+    protected void executeCreateCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, EntityExistsException, EntitlementServiceException{
+        throw new InvalidCommandException(commandParser.getInputCommand(), "Unsupported command");
+    }
 }

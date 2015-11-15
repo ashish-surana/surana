@@ -24,4 +24,6 @@ public interface HouseMateEntitlementService {
     public void createRole(String identifier, String name, String description) throws EntityExistsException;
 
     public void addEntitlementToRole(String roleId, String entitlementId) throws EntitlementServiceException;
+
+    public void createUser(String identifier, String name) throws EntitlementServiceException;
 }

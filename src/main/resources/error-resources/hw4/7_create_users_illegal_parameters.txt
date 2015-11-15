@@ -1,0 +1,11 @@
+# create user
+# create user <user_id> <user_name>
+
+#Omit user id or user name
+create user "Sam"
+
+#Pass additional parameters
+create user jimmy "Jimmy" "George"
+
+#Make sure that remaining commands get executed.
+create user debra "Debra Smart"
