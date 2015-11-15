@@ -1,0 +1,11 @@
+# define resources
+# define resource <resource_id> <resource_description>
+
+#Omit resource id or description
+define resource "Represents house1 and all resources within house1"
+
+#Pass additional arguments
+define resource oven1 "Represents oven1" "In house1"
+
+#Make sure that remaining commands execute.
+define resource oven2 "Represents oven2"

@@ -69,6 +69,13 @@ public class HouseMateEntitlementServiceImpl implements HouseMateEntitlementServ
         System.out.printf("Added role '%s' to user id: '%s'.\n", roleId, userId);
     }
 
+    @Override
+    public void createResource(String resourceId, String resourceDescription) throws EntityExistsException {
+        resourceFactory.createResource(resourceId, resourceDescription);
+        System.out.printf("Created resource with id: '%s' and description: '%s'.\n",
+                resourceId, resourceDescription);
+    }
+
     public AccessToken login(VoicePrintCredential proposedCredential) throws EntitlementServiceException, EntityNotFoundException, AuthenticationException {
         if(proposedCredential == null){
             throw new EntitlementServiceException("VoicePrintCredential cannot be null");

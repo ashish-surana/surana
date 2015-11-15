@@ -27,6 +27,8 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
 
     private final Map<String, ResourceRole> resourceRoles;
 
+    private final Map<String, Resource> resources;
+
     public HouseMateEntitlementResourceFactory(){
         adminAccessToken = new AccessToken(HouseMateEntitlementResourceFactory.class.getName());
 
@@ -35,6 +37,7 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
         permissions = new HashMap<>();
         roles = new HashMap<>();
         resourceRoles = new HashMap<>();
+        resources = new HashMap<>();
     }
 
     @Override
@@ -161,6 +164,18 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
         }
 
         return resourceRole;
+    }
+
+    @Override
+    public void createResource(String resourceId, String resourceDescription) throws EntityExistsException {
+        Resource resource = resources.get(resourceId);
+
+        if(resource != null){
+            throw new EntityExistsException(resource);
+        }
+
+        resource = new Resource(resourceId, resourceDescription);
+        resources.put(resourceId, resource);
     }
 
     public Permission getPermission(String identifier) throws EntityNotFoundException {

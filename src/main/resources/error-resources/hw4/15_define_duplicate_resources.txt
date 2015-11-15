@@ -1,0 +1,9 @@
+# define resources
+# define resource <resource_id> <resource_description>
+define resource house1 "Represents house1 and all resources within house1"
+
+#Try to define house1 again
+define resource house1 "Defining house1 again"
+
+#Make sure that remaining commands execute.
+define resource oven2 "Represents oven2"
