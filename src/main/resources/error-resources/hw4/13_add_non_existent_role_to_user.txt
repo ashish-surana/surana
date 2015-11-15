@@ -1,0 +1,9 @@
+# create user
+# create user <user_id> <user_name>
+create user sam "Sam"
+
+# add role to user
+# add role_to_user <user_id> <role>
+
+#Pass non-existent role
+add role_to_user sam made_up_role

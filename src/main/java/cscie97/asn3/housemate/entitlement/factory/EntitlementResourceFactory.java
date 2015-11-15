@@ -1,9 +1,6 @@
 package cscie97.asn3.housemate.entitlement.factory;
 
-import cscie97.asn3.housemate.entitlement.AccessToken;
-import cscie97.asn3.housemate.entitlement.Entitlement;
-import cscie97.asn3.housemate.entitlement.Role;
-import cscie97.asn3.housemate.entitlement.User;
+import cscie97.asn3.housemate.entitlement.*;
 import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
 import cscie97.asn3.housemate.entitlement.exception.EntityExistsException;
 import cscie97.asn3.housemate.entitlement.exception.EntityNotFoundException;
@@ -30,4 +27,8 @@ public interface EntitlementResourceFactory {
     public Role getRole(String roleId) throws EntityNotFoundException;
 
     public Entitlement getEntitlement(String entitlementId) throws EntityNotFoundException;
+
+    public ResourceRole createResourceRole(String resourceRoleName, Resource resource, Role role) throws EntityExistsException;
+
+    public ResourceRole getResourceRole(String resourceRoleName) throws EntityNotFoundException;
 }

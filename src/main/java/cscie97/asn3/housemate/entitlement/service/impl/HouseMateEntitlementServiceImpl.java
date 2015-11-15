@@ -11,9 +11,6 @@ import cscie97.asn3.housemate.entitlement.factory.EntitlementResourceFactory;
 import cscie97.asn3.housemate.entitlement.factory.impl.HouseMateEntitlementResourceFactory;
 import cscie97.asn3.housemate.entitlement.service.HouseMateEntitlementService;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  */
@@ -51,6 +48,25 @@ public class HouseMateEntitlementServiceImpl implements HouseMateEntitlementServ
             throw new EntitlementServiceException("Unrecognized credential type: '"+ credential.getClass().getName()+
                     "' for user id: '" + userId + "'");
         }
+    }
+
+    @Override
+    public void addRoleToUser(String userId, String roleId) throws EntitlementServiceException {
+        User user = resourceFactory.getUser(userId);
+        Role role = resourceFactory.getRole(roleId);
+        Resource resource = Resource.ALL_RESOURCE;
+
+        String resourceRoleName = resource.getIdentifier() + ":" + roleId;
+
+        ResourceRole resourceRole;
+        try{
+            resourceRole = resourceFactory.getResourceRole(resourceRoleName);
+        }catch (EntityNotFoundException e){
+            resourceRole = resourceFactory.createResourceRole(resourceRoleName, resource, role);
+        }
+
+        user.addResourceRole(resourceRole);
+        System.out.printf("Added role '%s' to user id: '%s'.\n", roleId, userId);
     }
 
     public AccessToken login(VoicePrintCredential proposedCredential) throws EntitlementServiceException, EntityNotFoundException, AuthenticationException {

@@ -29,7 +29,7 @@ public class TestDriver {
         args[0] = "C:\\Users\\assurana\\Documents\\Ashish\\Harvard\\2015\\CSCIE-97 Software Design\\hw4\\source\\surana\\src\\main\\" +
                 "resources\\" +
                 "error-resources" +
-                "\\hw4\\\\10_add_user_credential_non_existent_user.txt";
+                "\\hw4\\\\13_add_non_existent_role_to_user.txt";
 
         if(args == null || args.length == 0){
             printUsage();

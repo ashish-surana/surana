@@ -74,6 +74,7 @@ public class CommandFactory {
                 return new RoleCommand(accessToken);
             case "create user":
             case "add user_credential":
+            case "add role_to_user" :
                 return new UserCommand(accessToken);
             default:
                 return null;

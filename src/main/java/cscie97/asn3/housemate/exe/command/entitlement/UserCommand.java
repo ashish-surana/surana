@@ -24,6 +24,8 @@ public class UserCommand extends Command{
 
     private static final String PASSWORD = "password";
 
+    private static final String ROLE_TO_USER = "role_to_user";
+
     public UserCommand(AccessToken accessToken) {
         super(accessToken);
     }
@@ -46,10 +48,27 @@ public class UserCommand extends Command{
     protected void executeAddCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, EntityExistsException, EntitlementServiceException {
         //Input command format is:
         //add user_credential jimmy voice_print jimmy, or
-        //add user_credential debra password secret
+        //add user_credential debra password secret, or
+        //add role_to_user sam child_resident
+
         assert commandParser !=null : "Command parser cannot be null";
 
-        commandParser.ensureNextToken(USER_CREDENTIAL);
+        String command = commandParser.ensureNextToken(USER_CREDENTIAL, ROLE_TO_USER);
+
+        if(USER_CREDENTIAL.equals(command)){
+            executeAddUserCredentialCommand(commandParser);
+        }else if(ROLE_TO_USER.equals(command)) {
+            executeAddRoleToUserCommand(commandParser);
+        }else {
+            throw new InvalidCommandException(commandParser.getInputCommand(), "Unrecognized command");
+        }
+
+    }
+
+    private void executeAddUserCredentialCommand(CommandParser commandParser) throws EntitlementServiceException, InvalidCommandException {
+        //Input command format is:
+        //add user_credential jimmy voice_print jimmy, or
+        //add user_credential debra password secret
         String userId = commandParser.getNextToken("User identifier");
         String credentialType = commandParser.ensureNextToken(VOICE_PRINT, PASSWORD);
         String plainTextCredential = commandParser.getNextToken("User "+ credentialType);
@@ -64,5 +83,16 @@ public class UserCommand extends Command{
         }
 
         entitlementService.setUserCredential(userId, credential);
+    }
+
+    private void executeAddRoleToUserCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, EntitlementServiceException {
+        //Input command format is:
+        //# add role_to_user <user_id> <role>
+        //add role_to_user debra admin_role
+        String userId = commandParser.getNextToken("User identifier");
+        String roleId = commandParser.getNextToken("Role identifier");
+        commandParser.ensureTermination();
+
+        entitlementService.addRoleToUser(userId, roleId);
     }
 }

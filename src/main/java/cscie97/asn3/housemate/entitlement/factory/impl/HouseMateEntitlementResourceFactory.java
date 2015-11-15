@@ -25,6 +25,8 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
 
     private final Map<String, Role> roles;
 
+    private final Map<String, ResourceRole> resourceRoles;
+
     public HouseMateEntitlementResourceFactory(){
         adminAccessToken = new AccessToken(HouseMateEntitlementResourceFactory.class.getName());
 
@@ -32,6 +34,7 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
         accessTokens = new HashMap<>();
         permissions = new HashMap<>();
         roles = new HashMap<>();
+        resourceRoles = new HashMap<>();
     }
 
     @Override
@@ -128,6 +131,36 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
             Entitlement entitlement = getPermission(entitlementId);
             return entitlement;
         }
+    }
+
+    @Override
+    public ResourceRole createResourceRole(String resourceRoleName, Resource resource, Role role) throws EntityExistsException {
+        assert resourceRoleName != null && !"".equals(resourceRoleName) : "Resouce role name cannot be null or empty string";
+        assert resource != null : "Resource cannot be null";
+        assert role != null : "Role cannot be null";
+
+        ResourceRole resourceRole = resourceRoles.get(resourceRoleName);
+
+        if(resourceRole != null){
+            throw new EntityExistsException(resourceRole);
+        }
+
+        resourceRole = new ResourceRole(resourceRoleName, role, resource);
+        resourceRoles.put(resourceRoleName, resourceRole);
+
+        return resourceRole;
+    }
+
+    @Override
+    public ResourceRole getResourceRole(String resourceRoleName) throws EntityNotFoundException {
+        assert resourceRoleName != null && !"".equals(resourceRoleName) : "Resource role name cannot be null or empty string";
+
+        ResourceRole resourceRole = resourceRoles.get(resourceRoleName);
+        if(resourceRole == null){
+            throw new EntityNotFoundException(resourceRoleName);
+        }
+
+        return resourceRole;
     }
 
     public Permission getPermission(String identifier) throws EntityNotFoundException {
