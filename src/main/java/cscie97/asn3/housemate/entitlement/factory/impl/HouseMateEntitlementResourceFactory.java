@@ -178,6 +178,19 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
         resources.put(resourceId, resource);
     }
 
+    @Override
+    public Resource getResource(String resourceId) throws EntityNotFoundException {
+        assert resourceId != null && !"".equals(resourceId) : "Resource identifier cannot be null or empty string";
+
+        Resource resource = resources.get(resourceId);
+
+        if (resource == null) {
+            throw new EntityNotFoundException(resourceId);
+        }
+
+        return resource;
+    }
+
     public Permission getPermission(String identifier) throws EntityNotFoundException {
         Permission permission = permissions.get(identifier);
 

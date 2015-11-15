@@ -2,10 +2,7 @@ package cscie97.asn3.housemate.exe.command.factory;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
 import cscie97.asn3.housemate.exe.command.Command;
-import cscie97.asn3.housemate.exe.command.entitlement.PermissionCommand;
-import cscie97.asn3.housemate.exe.command.entitlement.ResourceCommand;
-import cscie97.asn3.housemate.exe.command.entitlement.RoleCommand;
-import cscie97.asn3.housemate.exe.command.entitlement.UserCommand;
+import cscie97.asn3.housemate.exe.command.entitlement.*;
 import cscie97.asn3.housemate.exe.command.model.*;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
 
@@ -79,6 +76,8 @@ public class CommandFactory {
                 return new UserCommand(accessToken);
             case "define resource":
                 return new ResourceCommand(accessToken);
+            case "create resource_role":
+                return new ResourceRoleCommand(accessToken);
             default:
                 return null;
         }

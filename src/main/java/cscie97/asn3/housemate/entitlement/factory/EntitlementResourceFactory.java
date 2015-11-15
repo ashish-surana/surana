@@ -33,4 +33,6 @@ public interface EntitlementResourceFactory {
     public ResourceRole getResourceRole(String resourceRoleName) throws EntityNotFoundException;
 
     public void createResource(String resourceId, String resourceDescription) throws EntityExistsException;
+
+    public Resource getResource(String resourceId) throws EntityNotFoundException;
 }

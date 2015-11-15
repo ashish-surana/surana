@@ -29,7 +29,7 @@ public class TestDriver {
         args[0] = "C:\\Users\\assurana\\Documents\\Ashish\\Harvard\\2015\\CSCIE-97 Software Design\\hw4\\source\\surana\\src\\main\\" +
                 "resources\\" +
                 "error-resources" +
-                "\\hw4\\\\15_define_duplicate_resources.txt";
+                "\\hw4\\\\17_create_duplicate_resource_role.txt";
 
         if(args == null || args.length == 0){
             printUsage();
