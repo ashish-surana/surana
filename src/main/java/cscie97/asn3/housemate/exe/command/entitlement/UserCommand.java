@@ -26,6 +26,8 @@ public class UserCommand extends Command{
 
     private static final String ROLE_TO_USER = "role_to_user";
 
+    private static final String RESOURCE_ROLE_TO_USER = "resource_role_to_user";
+
     public UserCommand(AccessToken accessToken) {
         super(accessToken);
     }
@@ -49,16 +51,18 @@ public class UserCommand extends Command{
         //Input command format is:
         //add user_credential jimmy voice_print jimmy, or
         //add user_credential debra password secret, or
-        //add role_to_user sam child_resident
-
+        //add role_to_user sam child_resident, or
+        //add resource_role_to_user sam house1_adult_resident
         assert commandParser !=null : "Command parser cannot be null";
 
-        String command = commandParser.ensureNextToken(USER_CREDENTIAL, ROLE_TO_USER);
+        String command = commandParser.ensureNextToken(USER_CREDENTIAL, ROLE_TO_USER, RESOURCE_ROLE_TO_USER);
 
         if(USER_CREDENTIAL.equals(command)){
             executeAddUserCredentialCommand(commandParser);
         }else if(ROLE_TO_USER.equals(command)) {
             executeAddRoleToUserCommand(commandParser);
+        }else if(RESOURCE_ROLE_TO_USER.equals(command)) {
+            executeAddResourceRoleToUserCommand(commandParser);
         }else {
             throw new InvalidCommandException(commandParser.getInputCommand(), "Unrecognized command");
         }
@@ -94,5 +98,16 @@ public class UserCommand extends Command{
         commandParser.ensureTermination();
 
         entitlementService.addRoleToUser(userId, roleId);
+    }
+
+    private void executeAddResourceRoleToUserCommand(CommandParser commandParser) throws EntitlementServiceException, InvalidCommandException {
+        //Input command format is:
+        //add resource_role_to_user <user_id> <resource_role>
+        //add resource_role_to_user sam house1_adult_resident
+        String userId = commandParser.getNextToken("User identifier");
+        String resourceRoleId = commandParser.getNextToken("Resource role identifier");
+        commandParser.ensureTermination();
+
+        entitlementService.addResourceRoleToUser(userId, resourceRoleId);
     }
 }

@@ -1,0 +1,29 @@
+# define roles
+# define role <role_id> <role_name> <role_description>
+define role adult_resident "Adult Resident Role" "Has all permissions of an adult resident"
+define role child_resident "Child Resident Role" "Has all permissions of a child resident"
+
+# create user
+# create user <user_id> <user_name>
+create user sam "Sam"
+create user jimmy "Jimmy"
+
+
+# define resources
+# define resource <resource_id> <resource_description>
+define resource house1 "Represents house1 and all resources within house1"
+
+
+# create resource role
+# create resource_role <resource_role_name> <role> <resource>
+create resource_role house1_child_resident child_resident house1
+create resource_role house1_adult_resident adult_resident house1
+
+# add resource role to user
+# add resource_role_to_user <user_id> <resource_role>
+
+#Add resource role to fictitious user
+add resource_role_to_user fictitiousUser house1_adult_resident
+
+#Make sure remaining commands execute.
+add resource_role_to_user jimmy house1_child_resident

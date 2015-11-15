@@ -1,0 +1,8 @@
+# add resource role to user
+# add resource_role_to_user <user_id> <resource_role>
+
+#Omit one or more required parameters
+add resource_role_to_user sam
+
+#Pass additional parameters
+add resource_role_to_user jimmy house1_child_resident house1_adult_resident

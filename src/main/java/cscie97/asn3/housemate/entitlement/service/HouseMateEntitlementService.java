@@ -35,4 +35,6 @@ public interface HouseMateEntitlementService {
     public void createResource(String resourceId, String resourceDescription) throws EntityExistsException;
 
     public void createResourceRole(String resourceRoleName, String roleId, String resourceId) throws EntityExistsException, EntityNotFoundException;
+
+    public void addResourceRoleToUser(String userId, String resourceRoleId) throws EntitlementServiceException;
 }

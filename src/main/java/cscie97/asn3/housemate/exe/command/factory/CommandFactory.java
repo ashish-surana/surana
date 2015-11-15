@@ -73,6 +73,7 @@ public class CommandFactory {
             case "create user":
             case "add user_credential":
             case "add role_to_user" :
+            case "add resource_role_to_user":
                 return new UserCommand(accessToken);
             case "define resource":
                 return new ResourceCommand(accessToken);
