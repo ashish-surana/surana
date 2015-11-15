@@ -8,8 +8,8 @@ import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
  */
 public class VoicePrintCredential extends Credential{
 
-    public VoicePrintCredential(String userId, String unencrypedVoicePrint) throws EntitlementServiceException {
-        super(userId, unencrypedVoicePrint);
+    public VoicePrintCredential(String userId, String unencryptedVoicePrint) throws EntitlementServiceException {
+        super(userId, unencryptedVoicePrint);
     }
 
     @Override

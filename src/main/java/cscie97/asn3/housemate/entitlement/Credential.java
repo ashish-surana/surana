@@ -68,16 +68,16 @@ public abstract class Credential {
      * From a password, a number of iterations and a salt,
      * returns the corresponding digest
      * @param iterationNb int The number of iterations of the algorithm
-     * @param password String The password to encrypt
+     * @param plaintTextCredential String The password to encrypt
      * @param salt byte[] The salt
      * @return byte[] The digested password
      * @throws NoSuchAlgorithmException If the algorithm doesn't exist
      */
-    private byte[] getHash(int iterationNb, String password, byte[] salt) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-2");
+    private byte[] getHash(int iterationNb, String plaintTextCredential, byte[] salt) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
         digest.reset();
         digest.update(salt);
-        byte[] input = digest.digest(password.getBytes("UTF-8"));
+        byte[] input = digest.digest(plaintTextCredential.getBytes("UTF-8"));
         for (int i = 0; i < iterationNb; i++) {
             digest.reset();
             input = digest.digest(input);

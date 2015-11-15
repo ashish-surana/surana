@@ -1,9 +1,6 @@
 package cscie97.asn3.housemate.entitlement.service.impl;
 
-import cscie97.asn3.housemate.entitlement.AccessToken;
-import cscie97.asn3.housemate.entitlement.Entitlement;
-import cscie97.asn3.housemate.entitlement.Role;
-import cscie97.asn3.housemate.entitlement.User;
+import cscie97.asn3.housemate.entitlement.*;
 import cscie97.asn3.housemate.entitlement.credential.PasswordCredential;
 import cscie97.asn3.housemate.entitlement.credential.VoicePrintCredential;
 import cscie97.asn3.housemate.entitlement.exception.AuthenticationException;
@@ -36,6 +33,24 @@ public class HouseMateEntitlementServiceImpl implements HouseMateEntitlementServ
     public void createUser(String userId, String userName) throws EntitlementServiceException, EntityExistsException {
         resourceFactory.createUser(userId, userName);
         System.out.printf("Created user with id: '%s' and name: '%s'.\n", userId, userName);
+    }
+
+    @Override
+    public void setUserCredential(String userId, Credential credential) throws EntitlementServiceException {
+        assert credential != null : "Credential cannot be null";
+
+        User user = resourceFactory.getUser(userId);
+
+        if(credential instanceof VoicePrintCredential){
+            user.setVoicePrint(credential);
+            System.out.printf("New voice print for user id: '%s' has been set.\n", userId);
+        }else if(credential instanceof PasswordCredential){
+            user.setPassword(credential);
+            System.out.printf("New password for user id: '%s' has been set.\n", userId);
+        }else {
+            throw new EntitlementServiceException("Unrecognized credential type: '"+ credential.getClass().getName()+
+                    "' for user id: '" + userId + "'");
+        }
     }
 
     public AccessToken login(VoicePrintCredential proposedCredential) throws EntitlementServiceException, EntityNotFoundException, AuthenticationException {

@@ -27,8 +27,9 @@ public class TestDriver {
     public static void main(String[] args) throws UnsupportedEncodingException {
         args = new String[1];
         args[0] = "C:\\Users\\assurana\\Documents\\Ashish\\Harvard\\2015\\CSCIE-97 Software Design\\hw4\\source\\surana\\src\\main\\" +
-                "resources\\error-resources" +
-                "\\hw4\\\\8_create_duplicate_users.txt";
+                "resources\\" +
+                "error-resources" +
+                "\\hw4\\\\10_add_user_credential_non_existent_user.txt";
 
         if(args == null || args.length == 0){
             printUsage();

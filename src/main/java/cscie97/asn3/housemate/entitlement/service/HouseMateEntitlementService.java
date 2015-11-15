@@ -1,6 +1,7 @@
 package cscie97.asn3.housemate.entitlement.service;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.Credential;
 import cscie97.asn3.housemate.entitlement.credential.PasswordCredential;
 import cscie97.asn3.housemate.entitlement.credential.VoicePrintCredential;
 import cscie97.asn3.housemate.entitlement.exception.AuthenticationException;
@@ -26,4 +27,6 @@ public interface HouseMateEntitlementService {
     public void addEntitlementToRole(String roleId, String entitlementId) throws EntitlementServiceException;
 
     public void createUser(String identifier, String name) throws EntitlementServiceException;
+
+    public void setUserCredential(String userId, Credential credential) throws EntitlementServiceException;
 }

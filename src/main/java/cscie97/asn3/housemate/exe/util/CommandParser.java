@@ -107,14 +107,15 @@ public class CommandParser {
     }
 
     /**
-
+     * This method ensures that the next token is among the given expected tokens.
+     * It returns the actual token found.
      */
-    public void ensureNextToken(String... expectedNextTokens) throws InvalidCommandException{
+    public String ensureNextToken(String... expectedNextTokens) throws InvalidCommandException{
         String actualToken = getNextToken(expectedNextTokens[0]);
 
         for(String expectedNextToken : expectedNextTokens){
             if(expectedNextToken.equals(actualToken)){
-                return;
+                return actualToken;
             }
         }
 
