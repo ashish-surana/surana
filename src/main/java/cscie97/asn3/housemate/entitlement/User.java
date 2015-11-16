@@ -20,6 +20,8 @@ public class User extends Entity{
 
     private Credential voicePrint;
 
+    private AccessToken accessToken;
+
     private final Map<String, ResourceRole> resourceRoles;
 
     public User(String identifier, String name){
@@ -59,4 +61,11 @@ public class User extends Entity{
         resourceRoles.put(resourceRole.getIdentifier(), resourceRole);
     }
 
+    public AccessToken getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(AccessToken accessToken) {
+        this.accessToken = accessToken;
+    }
 }

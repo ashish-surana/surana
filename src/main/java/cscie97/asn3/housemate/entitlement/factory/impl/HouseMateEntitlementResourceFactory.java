@@ -21,8 +21,6 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
 
     private final Map<String, Permission> permissions;
 
-    private final AccessToken adminAccessToken;
-
     private final Map<String, Role> roles;
 
     private final Map<String, ResourceRole> resourceRoles;
@@ -30,8 +28,6 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
     private final Map<String, Resource> resources;
 
     public HouseMateEntitlementResourceFactory(){
-        adminAccessToken = new AccessToken(HouseMateEntitlementResourceFactory.class.getName());
-
         users = new HashMap<>();
         accessTokens = new HashMap<>();
         permissions = new HashMap<>();
@@ -76,15 +72,18 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
     }
 
     @Override
-    public AccessToken createAccessToken(String userId) {
-        AccessToken accessToken = new AccessToken(userId);
-        accessTokens.put(accessToken.getIdentifier(), accessToken);
-        return accessToken;
-    }
+    public AccessToken getOrCreateAccessToken(String userId) throws EntitlementServiceException {
+        User user = getUser(userId);
 
-    @Override
-    public AccessToken getAdminAccessToken() {
-        return adminAccessToken;
+        AccessToken accessToken = user.getAccessToken();
+
+        if (accessToken == null) {
+            accessToken = new AccessToken(userId);
+            user.setAccessToken(accessToken);
+            accessTokens.put(accessToken.getIdentifier(), accessToken);
+        }
+
+        return accessToken;
     }
 
     @Override

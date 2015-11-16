@@ -1,8 +1,10 @@
 package cscie97.asn3.housemate.test;
 
 import cscie97.asn3.housemate.core.init.StartUpService;
+import cscie97.asn3.housemate.core.init.exception.InitializationException;
 import cscie97.asn3.housemate.entitlement.AccessToken;
-import cscie97.asn3.housemate.entitlement.exception.*;
+import cscie97.asn3.housemate.entitlement.exception.AuthenticationException;
+import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
 import cscie97.asn3.housemate.entitlement.service.HouseMateEntitlementService;
 import cscie97.asn3.housemate.entitlement.service.factory.HouseMateEntitlementServiceFactory;
 import cscie97.asn3.housemate.model.service.exception.*;
@@ -35,14 +37,18 @@ public class TestDriver {
             printUsage();
             return;
         }
-        StartUpService.init();
         String configFilePath = args[0];
 
-        HouseMateEntitlementServiceFactory entitlementServiceFactory = new HouseMateEntitlementServiceFactory();
-        HouseMateEntitlementService entitlementService = entitlementServiceFactory.getService();
         try {
-            AccessToken accessToken = entitlementService.getAdminAccessToken();
+            //Initialize HouseMate Automation System.
+            StartUpService.init();
 
+            //Get Entitlement Service, and login as admin user.
+            HouseMateEntitlementServiceFactory entitlementServiceFactory = new HouseMateEntitlementServiceFactory();
+            HouseMateEntitlementService entitlementService = entitlementServiceFactory.getService();
+            AccessToken accessToken = entitlementService.login(StartUpService.getAdminPassword());
+
+            //Pass admin access token to executor for executing the commands from config file.
             HouseMateServiceExecutor executor = new HouseMateServiceExecutor(accessToken);
             executor.executeFile(configFilePath);
         }catch (InvalidBulkCommandException e) {
@@ -76,18 +82,21 @@ public class TestDriver {
         } catch (HouseMateModelServiceException e) {
             String message = "Error occurred with message: '"+ e.getMessage()+"'.";
             System.err.println(message);
-//        } catch (cscie97.asn3.housemate.entitlement.exception.EntityNotFoundException e) {
-//            String message = "Error executing a command on entity with id: '"+ e.getEntity();
-//            message += "'. Error message is: '"+ e.getMessage()+"'.";
-//            System.err.println(message);
-//        } catch (AuthenticationException e) {
-//            String message = "Error logging in as user id: '" + e.getUserId();
-//            message += "'. Error message is: '"+ e.getMessage()+"'.";
-//            System.err.println(message);
-//        } catch (EntitlementServiceException e) {
-//            String message = "Error executing a command";
-//            message += ". Error message is: '"+ e.getMessage()+"'.";
-//            System.err.println(message);
+        } catch (cscie97.asn3.housemate.entitlement.exception.EntityNotFoundException e) {
+            String message = "Error executing a command on entity with id: '"+ e.getEntity();
+            message += "'. Error message is: '"+ e.getMessage()+"'.";
+            System.err.println(message);
+        } catch (AuthenticationException e) {
+            String message = "Error logging in as user id: '" + e.getUserId();
+            message += "'. Error message is: '"+ e.getMessage()+"'.";
+            System.err.println(message);
+        } catch (EntitlementServiceException e) {
+            String message = "Error executing a command";
+            message += ". Error message is: '"+ e.getMessage()+"'.";
+            System.err.println(message);
+        } catch (InitializationException e) {
+            String message = "Error occurred with message: '" + e.getMessage() + "' during HouseMate automation system initialization.";
+            System.err.println(message);
         }
     }
 

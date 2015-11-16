@@ -16,9 +16,7 @@ public interface EntitlementResourceFactory {
 
     public User getUser(String userId) throws EntitlementServiceException;
 
-    public AccessToken createAccessToken(String userId);
-
-    public AccessToken getAdminAccessToken();
+    public AccessToken getOrCreateAccessToken(String userId) throws EntitlementServiceException;
 
     public void createPermission(String permissionId, String permissionName, String permissionDescription) throws EntityExistsException;
 

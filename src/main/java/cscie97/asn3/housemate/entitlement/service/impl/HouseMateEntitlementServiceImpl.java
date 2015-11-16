@@ -111,34 +111,29 @@ public class HouseMateEntitlementServiceImpl implements HouseMateEntitlementServ
             throw new AuthenticationException(userId, "Invalid user id or voice print");
         }
 
-        AccessToken accessToken = resourceFactory.createAccessToken(userId);
+        AccessToken accessToken = resourceFactory.getOrCreateAccessToken(userId);
         return accessToken;
     }
 
     @Override
     public AccessToken login(PasswordCredential proposedCredential) throws EntitlementServiceException, EntityNotFoundException, AuthenticationException {
         if(proposedCredential == null){
-            throw new EntitlementServiceException("VoicePrintCredential cannot be null");
+            throw new EntitlementServiceException("PasswordCredential cannot be null");
         }
 
         String userId = proposedCredential.getUserId();
         User user = resourceFactory.getUser(userId);
 
-        if(user.getVoicePrint() == null){
+        if(user.getPassword() == null){
             throw new EntityNotFoundException("Password for "+ userId);
         }
-
-        if(!user.getVoicePrint().equals(proposedCredential)){
+        //if hashed passwords are not equals, then throw an exception.
+        if(!user.getPassword().equals(proposedCredential)){
             throw new AuthenticationException(userId, "Invalid user id or password");
         }
 
-        AccessToken accessToken = resourceFactory.createAccessToken(userId);
+        AccessToken accessToken = resourceFactory.getOrCreateAccessToken(userId);
         return accessToken;
-    }
-
-    @Override
-    public AccessToken getAdminAccessToken() {
-        return resourceFactory.getAdminAccessToken();
     }
 
     @Override

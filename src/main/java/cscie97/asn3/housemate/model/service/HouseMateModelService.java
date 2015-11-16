@@ -19,7 +19,7 @@ public interface HouseMateModelService {
 
     /**
      * Defines a house using given id.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS permission.
      * @param houseIdentifier
      * @throws EntityExistsException if the house with given id already exists.
      */
@@ -27,7 +27,7 @@ public interface HouseMateModelService {
 
     /**
      * Defines a room with given id, in the given house.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS permission.
      * @param houseId
      * @param roomId
      * @param roomType
@@ -39,7 +39,7 @@ public interface HouseMateModelService {
 
     /**
      * Defines an occupant with given input parameters.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have OCCUPANT_CRUD_ACCESS permission.
      * @param occupantId
      * @param occupantType
      * @throws EntityExistsException if occupant with given id already exists.
@@ -48,7 +48,7 @@ public interface HouseMateModelService {
 
     /**
      * Adds given occupant to the given house.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and OCCUPANT_CRUD_ACCESS permission.
      * @param occupantId
      * @param houseId
      * @throws EntityNotFoundException If the house or occupant does not exists.
@@ -57,13 +57,13 @@ public interface HouseMateModelService {
 
     /**
      * Shows configuration of all the entities in the HouseMate model service.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and OCCUPANT_CRUD_ACCESS permission.
      */
     public void showConfiguration(AccessToken accessToken);
 
     /**
      * Shows configuration of the house with given id.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and OCCUPANT_CRUD_ACCESS permission.
      * @param houseId
      * @throws EntityNotFoundException if house with given id does not exists.
      */
@@ -71,7 +71,7 @@ public interface HouseMateModelService {
 
     /**
      * Shows configuration of the room with given id, in the given house.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and OCCUPANT_CRUD_ACCESS permission.
      * @param houseId
      * @param roomId
      * @throws EntityNotFoundException if the given room or house does not exists.
@@ -80,7 +80,8 @@ public interface HouseMateModelService {
 
     /**
      * Defines a sensor of given type in the given house and room.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and ${sensorType}_CRUD_ACCESS permissions,
+     *                    where ${sensorType} is the input sensor type.
      * @param houseId
      * @param roomId
      * @param sensorType
@@ -92,7 +93,8 @@ public interface HouseMateModelService {
 
     /**
      * Defines an appliance of given type in the given house and room.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and ${applianceType}_CRUD_ACCESS permissions,
+     *                    where ${applianceType} is the input appliance type.
      * @param houseId
      * @param roomId
      * @param applianceType
@@ -104,7 +106,8 @@ public interface HouseMateModelService {
 
     /**
      * Sets status of the device(sensor or appliance) with given id, in the given house and room.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and ${deviceType}_CRUD_ACCESS permissions,
+     *                    where ${deviceType} is the device type.
      * @param houseId
      * @param roomId
      * @param deviceId
@@ -117,7 +120,8 @@ public interface HouseMateModelService {
 
     /**
      * Shows complete status of the given device(appliance or sensor)
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and ${deviceType}_CRUD_ACCESS permissions,
+     *                    where ${deviceType} is the device type.
      * @param houseId
      * @param roomId
      * @param deviceId
@@ -127,7 +131,8 @@ public interface HouseMateModelService {
 
     /**
      * Shows current value of the given device's requests status key. If no value is set, then an empty string is displayed.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and ${deviceType}_CRUD_ACCESS permissions,
+     *                    where ${deviceType} is the device type of given device id.
      * @param houseId
      * @param roomId
      * @param deviceId
@@ -138,15 +143,16 @@ public interface HouseMateModelService {
 
     /**
      * This method should be used to register a listener for listening to device's status change.
-     * Currently, there is no way to de-register a lisener.
-     * @param accessToken
+     * Currently, there is no way to de-register a listener.
+     * @param accessToken AccessToken must be active, and corresponding user must have DEVICE_STATUS_CHANGE_LISTENER_CRUD_ACCESS.
      * @param listener
      */
     public void registerListener(AccessToken accessToken, DeviceStatusChangeListener listener);
 
     /**
      * This method returns a set of ids for all devices of given type in given location.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and ${deviceType}_CRUD_ACCESS permissions,
+     *                    where ${deviceType} is the input device type.
      * @param houseId
      * @param roomId
      * @param deviceType
@@ -157,7 +163,8 @@ public interface HouseMateModelService {
 
     /**
      * This method sets the location of given occupant using given house and room.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and OCCUPANT_CRUD_ACCESS permissions,
+     *                    for given house and occupant.
      * @param occupantId
      * @param houseId
      * @param roomId
@@ -168,7 +175,8 @@ public interface HouseMateModelService {
 
     /**
      * This method is used to set current location of given occupants as 'Unknown'.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have OCCUPANT_CRUD_ACCESS permission,
+     *                    for given occupant.
      * @param occupantId
      * @throws EntityNotFoundException if occupant with given id does not exists.
      */
@@ -176,7 +184,8 @@ public interface HouseMateModelService {
 
     /**
      * This method returns a set of ids of all occupants in the given location.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and OCCUPANT_CRUD_ACCESS permission,
+     *                    for given house and its occupants.
      * @param houseId
      * @param roomId
      * @return
@@ -185,8 +194,19 @@ public interface HouseMateModelService {
     public Set<String> getOccupantIds(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException;
 
     /**
+     * This method returns a set of ids of all occupants in the given location.
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and OCCUPANT_CRUD_ACCESS permission,
+     *                    for given house and its occupants.
+     * @param houseId
+     * @return
+     * @throws EntityNotFoundException if given house does not exists.
+     */
+    public Set<String> getOccupantIds(AccessToken accessToken, String houseId) throws EntityNotFoundException;
+
+    /**
      * This method sets given occupant's status using the given input.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have OCCUPANT_CRUD_ACCESS permission,
+     *                    for given occupant.
      * @param occupantId
      * @param activityStatus
      * @throws EntityNotFoundException if the given occupant does not exists.
@@ -195,7 +215,8 @@ public interface HouseMateModelService {
 
     /**
      * This method returns floor number of given room. Floor number 1 indicates ground floor.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS permission,
+     *                    for given house.
      * @param houseId
      * @param roomId
      * @return
@@ -204,17 +225,9 @@ public interface HouseMateModelService {
     public int getFloorNumber(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException;
 
     /**
-     * This method returns a set of ids of all occupants in the given location.
-     * @param accessToken
-     * @param houseId
-     * @return
-     * @throws EntityNotFoundException if given house does not exists.
-     */
-    public Set<String> getOccupantIds(AccessToken accessToken, String houseId) throws EntityNotFoundException;
-
-    /**
      * This method returns all devices of given type in the given house.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and ${deviceType}_CRUD_ACCESS permissions,
+     *                    where ${deviceType} is the input device type.
      * @param houseId
      * @param deviceType
      * @return
@@ -224,7 +237,8 @@ public interface HouseMateModelService {
 
     /**
      * This method returns status of the given device in the given location.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and ${deviceType}_CRUD_ACCESS permissions,
+     *                    where ${deviceType} is the device type of given device id.
      * @param houseId
      * @param roomId
      * @param deviceId
@@ -237,7 +251,8 @@ public interface HouseMateModelService {
     /**
      * This method returns room location of the given occupant, if they are in the given house.
      * Otherwise, it returns <code>null</code>.
-     * @param accessToken
+     * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and OCCUPANT_CRUD_ACCESS permission,
+     *                    for given house and occupant.
      * @param occupantId
      * @param houseId
      * @return
