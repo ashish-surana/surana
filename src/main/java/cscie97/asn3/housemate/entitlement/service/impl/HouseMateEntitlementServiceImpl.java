@@ -3,13 +3,12 @@ package cscie97.asn3.housemate.entitlement.service.impl;
 import cscie97.asn3.housemate.entitlement.*;
 import cscie97.asn3.housemate.entitlement.credential.PasswordCredential;
 import cscie97.asn3.housemate.entitlement.credential.VoicePrintCredential;
-import cscie97.asn3.housemate.entitlement.exception.AuthenticationException;
-import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
-import cscie97.asn3.housemate.entitlement.exception.EntityExistsException;
-import cscie97.asn3.housemate.entitlement.exception.EntityNotFoundException;
+import cscie97.asn3.housemate.entitlement.exception.*;
 import cscie97.asn3.housemate.entitlement.factory.EntitlementResourceFactory;
 import cscie97.asn3.housemate.entitlement.factory.impl.HouseMateEntitlementResourceFactory;
 import cscie97.asn3.housemate.entitlement.service.HouseMateEntitlementService;
+import cscie97.asn3.housemate.entitlement.visitor.EntitlementVisitor;
+import cscie97.asn3.housemate.entitlement.visitor.impl.AccessVerifierVisitor;
 
 /**
  *
@@ -93,6 +92,20 @@ public class HouseMateEntitlementServiceImpl implements HouseMateEntitlementServ
 
         user.addResourceRole(resourceRole);
         System.out.printf("Added resource role '%s' to user id: '%s'.\n", resourceRoleId, userId);
+    }
+
+    @Override
+    public void checkAccess(AccessToken accessToken, String resourceId, String... claimedPermissions) throws
+            InvalidAccessTokenException, AccessDeniedException {
+        User user = resourceFactory.getUser(accessToken);
+
+
+        AccessVerifierVisitor visitor = new AccessVerifierVisitor(resourceId, claimedPermissions);
+        user.acceptVisitor(visitor);
+
+        if(!visitor.hasAccess()){
+            throw new AccessDeniedException(user.getIdentifier(), resourceId, visitor.getUnverifiedPermissions());
+        }
     }
 
     public AccessToken login(VoicePrintCredential proposedCredential) throws EntitlementServiceException, EntityNotFoundException, AuthenticationException {

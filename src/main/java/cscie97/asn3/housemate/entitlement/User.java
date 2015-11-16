@@ -1,6 +1,7 @@
 package cscie97.asn3.housemate.entitlement;
 
 import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
+import cscie97.asn3.housemate.entitlement.visitor.EntitlementVisitor;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -61,11 +62,20 @@ public class User extends Entity{
         resourceRoles.put(resourceRole.getIdentifier(), resourceRole);
     }
 
+    public Map<String, ResourceRole> getResourceRoles() {
+        return resourceRoles;
+    }
+
     public AccessToken getAccessToken() {
         return accessToken;
     }
 
     public void setAccessToken(AccessToken accessToken) {
         this.accessToken = accessToken;
+    }
+
+    @Override
+    public void acceptVisitor(EntitlementVisitor visitor) {
+        visitor.visitUser(this);
     }
 }

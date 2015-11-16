@@ -1,5 +1,7 @@
 package cscie97.asn3.housemate.entitlement;
 
+import cscie97.asn3.housemate.entitlement.visitor.EntitlementVisitor;
+
 /**
  * This class represents a resource role in the HouseMate entitlement service.
  */
@@ -26,5 +28,10 @@ public class ResourceRole extends Entity{
 
     public Role getRole() {
         return role;
+    }
+
+    @Override
+    public void acceptVisitor(EntitlementVisitor visitor) {
+        visitor.visitResourceRole(this);
     }
 }

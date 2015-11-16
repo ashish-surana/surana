@@ -1,6 +1,12 @@
 package cscie97.asn3.housemate.model.service.impl;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.Resource;
+import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
+import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
+import cscie97.asn3.housemate.entitlement.service.HouseMateEntitlementService;
+import cscie97.asn3.housemate.entitlement.service.factory.HouseMateEntitlementServiceFactory;
 import cscie97.asn3.housemate.model.Device;
 import cscie97.asn3.housemate.model.House;
 import cscie97.asn3.housemate.model.Occupant;
@@ -9,10 +15,7 @@ import cscie97.asn3.housemate.model.appliance.Ava;
 import cscie97.asn3.housemate.model.listener.DeviceStatusChangeListener;
 import cscie97.asn3.housemate.model.listener.support.DeviceStatusChangeEvent;
 import cscie97.asn3.housemate.model.service.HouseMateModelService;
-import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
-import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
-import cscie97.asn3.housemate.model.service.exception.InvalidEntityTypeException;
-import cscie97.asn3.housemate.model.service.exception.InvalidStatusException;
+import cscie97.asn3.housemate.model.service.exception.*;
 import cscie97.asn3.housemate.model.support.OccupantActivityStatus;
 import cscie97.asn3.housemate.model.support.OccupantType;
 import cscie97.asn3.housemate.model.support.RoomType;
@@ -36,11 +39,15 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
 
     private static final String ACTIVITY_PREDICATE = "IS";
 
+    private static final String HOUSE_CRUD_ACCESS_PERMISSION = "HOUSE_CRUD_ACCESS";
+
     private final Map<String, House> houses;
 
     private final Map<String, Occupant> occupants;
 
     private final Set<DeviceStatusChangeListener> deviceStatusChangeListeners;
+
+    private final HouseMateEntitlementService entitlementService;
 
     /**
      * Returns a singleton instance of this implementation.
@@ -53,14 +60,17 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         this.houses = new HashMap<>();
         this.occupants = new HashMap<>();
         this.deviceStatusChangeListeners = new HashSet<>();
+        entitlementService = new HouseMateEntitlementServiceFactory().getService();
     }
 
 
     @Override
-    public void defineHouse(AccessToken accessToken, String houseIdentifier) throws EntityExistsException{
+    public void defineHouse(AccessToken accessToken, String houseIdentifier) throws EntityExistsException, AccessDeniedException, InvalidAccessTokenException {
         assert houseIdentifier != null && !"".equals(houseIdentifier) : "House identifier cannot be null or empty string.";
 
         assert !houseIdentifier.contains(" ") : "House identifier cannot contain whitespace";
+
+        entitlementService.checkAccess(accessToken, Resource.ALL_RESOURCE_ID, HOUSE_CRUD_ACCESS_PERMISSION);
 
         House house = houses.get(houseIdentifier);
 
@@ -69,7 +79,13 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         }
 
         house = new House(houseIdentifier);
-        houses.put(houseIdentifier, house);
+
+        try {
+            entitlementService.createResource(houseIdentifier, houseIdentifier);
+            houses.put(houseIdentifier, house);
+        } catch (cscie97.asn3.housemate.entitlement.exception.EntityExistsException e) {
+            throw new EntityExistsException(e);
+        }
     }
 
     @Override

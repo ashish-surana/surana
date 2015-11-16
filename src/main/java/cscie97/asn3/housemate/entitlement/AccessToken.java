@@ -1,5 +1,7 @@
 package cscie97.asn3.housemate.entitlement;
 
+import cscie97.asn3.housemate.entitlement.visitor.EntitlementVisitor;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -16,6 +18,8 @@ public class AccessToken extends Entity{
 
     private final long expiryTime;
 
+    private final String userId;
+
     public AccessToken(String userId){
         super(UUID.randomUUID().toString());
 
@@ -26,12 +30,22 @@ public class AccessToken extends Entity{
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MILLISECOND, INACTIVE_TIME_OUT_MILLIS);
         expiryTime = calendar.getTimeInMillis();
+        this.userId = userId;
     }
 
     @Override
     public String getIdentifier() {
         setLastAccessed();
         return super.getIdentifier();
+    }
+
+    @Override
+    public void acceptVisitor(EntitlementVisitor visitor) {
+        visitor.visitAccessToken(this);
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     private void setLastAccessed() {

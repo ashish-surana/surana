@@ -1,5 +1,6 @@
 package cscie97.asn3.housemate.entitlement;
 
+import cscie97.asn3.housemate.entitlement.visitor.EntitlementVisitor;
 import cscie97.asn3.housemate.model.Entity;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 
@@ -28,6 +29,11 @@ public class Permission extends Entitlement{
     @Override
     public String getIdentifier() {
         return super.getIdentifier();
+    }
+
+    @Override
+    public void acceptVisitor(EntitlementVisitor visitor) {
+        visitor.visitPermission(this);
     }
 
     public String getDescription() {

@@ -30,8 +30,8 @@ public class TestDriver {
         args = new String[1];
         args[0] = "C:\\Users\\assurana\\Documents\\Ashish\\Harvard\\2015\\CSCIE-97 Software Design\\hw4\\source\\surana\\src\\main\\" +
                 "resources\\" +
-                "error-resources" +
-                "\\hw4\\\\20_add_non_existent_resource_role_to_user.txt";
+//                "error-resources" +
+                "\\hw3\\\\demo_occupant_active.txt";
 
         if(args == null || args.length == 0){
             printUsage();

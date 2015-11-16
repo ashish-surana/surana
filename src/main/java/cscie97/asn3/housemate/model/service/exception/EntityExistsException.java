@@ -12,6 +12,10 @@ public class EntityExistsException extends EntityException{
         super("An entity with given identifier already exists", entity);
     }
 
+    public EntityExistsException(cscie97.asn3.housemate.entitlement.exception.EntityExistsException e) {
+        super(e.getMessage(), e.getEntity());
+    }
+
     @Override
     public Entity getEntity() {
         return (Entity) super.getEntity();

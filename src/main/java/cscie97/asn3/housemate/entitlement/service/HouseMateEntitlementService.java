@@ -2,12 +2,10 @@ package cscie97.asn3.housemate.entitlement.service;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
 import cscie97.asn3.housemate.entitlement.Credential;
+import cscie97.asn3.housemate.entitlement.Resource;
 import cscie97.asn3.housemate.entitlement.credential.PasswordCredential;
 import cscie97.asn3.housemate.entitlement.credential.VoicePrintCredential;
-import cscie97.asn3.housemate.entitlement.exception.AuthenticationException;
-import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
-import cscie97.asn3.housemate.entitlement.exception.EntityExistsException;
-import cscie97.asn3.housemate.entitlement.exception.EntityNotFoundException;
+import cscie97.asn3.housemate.entitlement.exception.*;
 
 /**
  *
@@ -35,4 +33,6 @@ public interface HouseMateEntitlementService {
     public void createResourceRole(String resourceRoleName, String roleId, String resourceId) throws EntityExistsException, EntityNotFoundException;
 
     public void addResourceRoleToUser(String userId, String resourceRoleId) throws EntitlementServiceException;
+
+    public void checkAccess(AccessToken accessToken, String resourceId, String... claimedPermissions) throws InvalidAccessTokenException, AccessDeniedException;
 }

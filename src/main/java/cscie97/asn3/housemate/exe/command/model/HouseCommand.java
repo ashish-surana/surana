@@ -1,6 +1,7 @@
 package cscie97.asn3.housemate.exe.command.model;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
 import cscie97.asn3.housemate.exe.command.Command;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
@@ -18,7 +19,7 @@ public class HouseCommand extends Command {
     }
 
     @Override
-    protected void executeDefineCommand(CommandParser commandParser) throws InvalidCommandException, EntityExistsException {
+    protected void executeDefineCommand(CommandParser commandParser) throws InvalidCommandException, EntityExistsException, EntitlementServiceException {
         assert commandParser !=null : "Command parser cannot be null";
 
         commandParser.ensureNextToken(HOUSE);

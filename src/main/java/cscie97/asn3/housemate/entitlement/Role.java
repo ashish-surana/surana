@@ -1,5 +1,7 @@
 package cscie97.asn3.housemate.entitlement;
 
+import cscie97.asn3.housemate.entitlement.visitor.EntitlementVisitor;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,8 +39,17 @@ public class Role extends Entitlement{
         entitlements.add(entitlement);
     }
 
+    public Set<Entitlement> getEntitlements() {
+        return entitlements;
+    }
+
     @Override
     public String getIdentifier() {
         return super.getIdentifier();
+    }
+
+    @Override
+    public void acceptVisitor(EntitlementVisitor visitor) {
+        visitor.visitRole(this);
     }
 }

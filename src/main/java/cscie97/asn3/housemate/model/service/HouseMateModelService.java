@@ -1,6 +1,7 @@
 package cscie97.asn3.housemate.model.service;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
 import cscie97.asn3.housemate.model.listener.DeviceStatusChangeListener;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
@@ -23,7 +24,7 @@ public interface HouseMateModelService {
      * @param houseIdentifier
      * @throws EntityExistsException if the house with given id already exists.
      */
-    public void defineHouse(AccessToken accessToken, String houseIdentifier) throws EntityExistsException;
+    public void defineHouse(AccessToken accessToken, String houseIdentifier) throws EntityExistsException, EntitlementServiceException;
 
     /**
      * Defines a room with given id, in the given house.

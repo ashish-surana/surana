@@ -1,9 +1,7 @@
 package cscie97.asn3.housemate.entitlement.factory;
 
 import cscie97.asn3.housemate.entitlement.*;
-import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
-import cscie97.asn3.housemate.entitlement.exception.EntityExistsException;
-import cscie97.asn3.housemate.entitlement.exception.EntityNotFoundException;
+import cscie97.asn3.housemate.entitlement.exception.*;
 
 /**
  * This interface represents a factory for creating all "resources" required for Entitlement Service.
@@ -33,4 +31,6 @@ public interface EntitlementResourceFactory {
     public void createResource(String resourceId, String resourceDescription) throws EntityExistsException;
 
     public Resource getResource(String resourceId) throws EntityNotFoundException;
+
+    public User getUser(AccessToken accessToken) throws InvalidAccessTokenException, AccessDeniedException;
 }

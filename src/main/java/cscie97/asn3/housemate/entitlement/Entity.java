@@ -1,9 +1,11 @@
 package cscie97.asn3.housemate.entitlement;
 
+import cscie97.asn3.housemate.entitlement.visitor.EntitlementVisitor;
+
 /**
  * This is a base class for all domain classes in the HouseMate entitlement service.
  */
-public class Entity {
+public abstract class Entity {
 
     private final String identifier;
 
@@ -24,4 +26,6 @@ public class Entity {
     public String toString() {
         return identifier;
     }
+
+    public abstract void acceptVisitor(EntitlementVisitor visitor);
 }

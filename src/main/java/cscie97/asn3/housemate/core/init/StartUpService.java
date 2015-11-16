@@ -85,6 +85,9 @@ public class StartUpService {
 
                 entitlementService.addEntitlementToRole(ADMIN_ROLE_ID, permissionId);
             }
+
+            //Add admin_role to admin user
+            entitlementService.addRoleToUser(ADMIN_USER_ID, ADMIN_ROLE_ID);
         } catch (EntityExistsException e) {
             throw new InitializationException(e);
         } catch (EntitlementServiceException e) {

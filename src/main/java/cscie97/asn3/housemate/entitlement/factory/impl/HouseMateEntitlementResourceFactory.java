@@ -4,6 +4,7 @@ import cscie97.asn3.housemate.entitlement.*;
 import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
 import cscie97.asn3.housemate.entitlement.exception.EntityExistsException;
 import cscie97.asn3.housemate.entitlement.exception.EntityNotFoundException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.entitlement.factory.EntitlementResourceFactory;
 
 import java.util.HashMap;
@@ -188,6 +189,30 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
         }
 
         return resource;
+    }
+
+    @Override
+    public User getUser(AccessToken accessToken) throws InvalidAccessTokenException {
+        if (accessToken == null) {
+            throw new InvalidAccessTokenException(accessToken, "AccessToken cannot be null");
+        }
+
+        if(accessToken.isExpired()){
+            throw new InvalidAccessTokenException(accessToken, "AccessToken is expired");
+        }
+
+        if(!accessTokens.containsKey(accessToken.getIdentifier())){
+            throw new InvalidAccessTokenException(accessToken, "Unrecognized AccessToken");
+        }
+
+        String userId = accessToken.getUserId();
+        User user = users.get(userId);
+
+        if(user == null){
+            throw new InvalidAccessTokenException(accessToken, "AccessToken refers to invalid user id");
+        }
+
+        return user;
     }
 
     public Permission getPermission(String identifier) throws EntityNotFoundException {
