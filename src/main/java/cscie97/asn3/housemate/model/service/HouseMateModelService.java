@@ -1,7 +1,9 @@
 package cscie97.asn3.housemate.model.service;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
 import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.model.listener.DeviceStatusChangeListener;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
@@ -36,7 +38,7 @@ public interface HouseMateModelService {
      * @throws EntityNotFoundException if house with given id does not exists.
      * @throws EntityExistsException if room with given id already exists.
      */
-    public void defineRoom(AccessToken accessToken, String houseId, String roomId, RoomType roomType, Integer floorNumber) throws EntityNotFoundException, EntityExistsException;
+    public void defineRoom(AccessToken accessToken, String houseId, String roomId, RoomType roomType, Integer floorNumber) throws EntityNotFoundException, EntityExistsException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * Defines an occupant with given input parameters.
@@ -45,7 +47,7 @@ public interface HouseMateModelService {
      * @param occupantType
      * @throws EntityExistsException if occupant with given id already exists.
      */
-    public void defineOccupant(AccessToken accessToken, String occupantId, OccupantType occupantType) throws EntityExistsException;
+    public void defineOccupant(AccessToken accessToken, String occupantId, OccupantType occupantType) throws EntityExistsException, EntitlementServiceException;
 
     /**
      * Adds given occupant to the given house.
@@ -54,13 +56,13 @@ public interface HouseMateModelService {
      * @param houseId
      * @throws EntityNotFoundException If the house or occupant does not exists.
      */
-    public void addOccupant(AccessToken accessToken, String occupantId, String houseId) throws EntityNotFoundException;
+    public void addOccupant(AccessToken accessToken, String occupantId, String houseId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * Shows configuration of all the entities in the HouseMate model service.
      * @param accessToken AccessToken must be active, and corresponding user must have HOUSE_CRUD_ACCESS and OCCUPANT_CRUD_ACCESS permission.
      */
-    public void showConfiguration(AccessToken accessToken);
+    public void showConfiguration(AccessToken accessToken) throws AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * Shows configuration of the house with given id.
@@ -68,7 +70,7 @@ public interface HouseMateModelService {
      * @param houseId
      * @throws EntityNotFoundException if house with given id does not exists.
      */
-    public void showHouseConfiguration(AccessToken accessToken, String houseId) throws EntityNotFoundException;
+    public void showHouseConfiguration(AccessToken accessToken, String houseId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * Shows configuration of the room with given id, in the given house.
@@ -77,7 +79,7 @@ public interface HouseMateModelService {
      * @param roomId
      * @throws EntityNotFoundException if the given room or house does not exists.
      */
-    public void showRoomConfiguration(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException;
+    public void showRoomConfiguration(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * Defines a sensor of given type in the given house and room.
@@ -90,7 +92,7 @@ public interface HouseMateModelService {
      * @throws EntityNotFoundException if the given house or room does not exists.
      * @throws EntityExistsException if a device with given id already exists in the HouseMate model service.
      */
-    public void defineSensor(AccessToken accessToken, String houseId, String roomId, String sensorType, String sensorId) throws EntityNotFoundException, EntityExistsException, InvalidEntityTypeException;
+    public void defineSensor(AccessToken accessToken, String houseId, String roomId, String sensorType, String sensorId) throws EntityNotFoundException, EntityExistsException, InvalidEntityTypeException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * Defines an appliance of given type in the given house and room.
@@ -103,7 +105,7 @@ public interface HouseMateModelService {
      * @throws EntityNotFoundException if the given house or room does not exists.
      * @throws EntityExistsException if a device with given id already exists in the HouseMate model service.
      */
-    public void defineAppliance(AccessToken accessToken, String houseId, String roomId, String applianceType, String applianceId) throws EntityNotFoundException, EntityExistsException, InvalidEntityTypeException;
+    public void defineAppliance(AccessToken accessToken, String houseId, String roomId, String applianceType, String applianceId) throws EntityNotFoundException, EntityExistsException, InvalidEntityTypeException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * Sets status of the device(sensor or appliance) with given id, in the given house and room.
@@ -117,7 +119,7 @@ public interface HouseMateModelService {
      * @throws EntityNotFoundException If the given house, room or device do not exist.
      * @throws InvalidStatusException If the given status key or value are not valid for the given device.
      */
-    public void setDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId, String statusKey, String statusValue) throws EntityNotFoundException, InvalidStatusException;
+    public void setDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId, String statusKey, String statusValue) throws EntityNotFoundException, InvalidStatusException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * Shows complete status of the given device(appliance or sensor)
@@ -128,7 +130,7 @@ public interface HouseMateModelService {
      * @param deviceId
      * @throws EntityNotFoundException If the given house, room or device do not exists.
      */
-    public void showDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId) throws EntityNotFoundException;
+    public void showDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * Shows current value of the given device's requests status key. If no value is set, then an empty string is displayed.
@@ -140,7 +142,7 @@ public interface HouseMateModelService {
      * @param statusKey
      * @throws EntityNotFoundException If the given house, room, or device do not exists.
      */
-    public void showDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId, String statusKey) throws EntityNotFoundException;
+    public void showDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId, String statusKey) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * This method should be used to register a listener for listening to device's status change.
@@ -148,7 +150,7 @@ public interface HouseMateModelService {
      * @param accessToken AccessToken must be active, and corresponding user must have DEVICE_STATUS_CHANGE_LISTENER_CRUD_ACCESS.
      * @param listener
      */
-    public void registerListener(AccessToken accessToken, DeviceStatusChangeListener listener);
+    public void registerListener(AccessToken accessToken, DeviceStatusChangeListener listener) throws AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * This method returns a set of ids for all devices of given type in given location.
@@ -160,7 +162,7 @@ public interface HouseMateModelService {
      * @return
      * @throws EntityNotFoundException if given house or room do not exist.
      */
-    public Set<String> getDeviceIds(AccessToken accessToken, String houseId, String roomId, String deviceType) throws EntityNotFoundException;
+    public Set<String> getDeviceIds(AccessToken accessToken, String houseId, String roomId, String deviceType) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * This method sets the location of given occupant using given house and room.
@@ -172,7 +174,7 @@ public interface HouseMateModelService {
      * @throws EntityExistsException
      * @throws EntityNotFoundException if given occupant, house, or room do not exists.
      */
-    public void setOccupantLocation(AccessToken accessToken, String occupantId, String houseId, String roomId) throws EntityNotFoundException;
+    public void setOccupantLocation(AccessToken accessToken, String occupantId, String houseId, String roomId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * This method is used to set current location of given occupants as 'Unknown'.
@@ -181,7 +183,7 @@ public interface HouseMateModelService {
      * @param occupantId
      * @throws EntityNotFoundException if occupant with given id does not exists.
      */
-    public void unSetOccupantLocation(AccessToken accessToken, String occupantId) throws EntityNotFoundException;
+    public void unSetOccupantLocation(AccessToken accessToken, String occupantId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * This method returns a set of ids of all occupants in the given location.
@@ -192,7 +194,7 @@ public interface HouseMateModelService {
      * @return
      * @throws EntityNotFoundException if given house, room do not exists.
      */
-    public Set<String> getOccupantIds(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException;
+    public Set<String> getOccupantIds(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * This method returns a set of ids of all occupants in the given location.
@@ -202,7 +204,7 @@ public interface HouseMateModelService {
      * @return
      * @throws EntityNotFoundException if given house does not exists.
      */
-    public Set<String> getOccupantIds(AccessToken accessToken, String houseId) throws EntityNotFoundException;
+    public Set<String> getOccupantIds(AccessToken accessToken, String houseId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * This method sets given occupant's status using the given input.
@@ -212,7 +214,7 @@ public interface HouseMateModelService {
      * @param activityStatus
      * @throws EntityNotFoundException if the given occupant does not exists.
      */
-    public void setOccupantActivityStatus(AccessToken accessToken, String occupantId, OccupantActivityStatus activityStatus) throws EntityNotFoundException;
+    public void setOccupantActivityStatus(AccessToken accessToken, String occupantId, OccupantActivityStatus activityStatus) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * This method returns floor number of given room. Floor number 1 indicates ground floor.
@@ -223,7 +225,7 @@ public interface HouseMateModelService {
      * @return
      * @throws EntityNotFoundException if given house or room do not exist.
      */
-    public int getFloorNumber(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException;
+    public int getFloorNumber(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * This method returns all devices of given type in the given house.
@@ -234,7 +236,7 @@ public interface HouseMateModelService {
      * @return
      * @throws EntityNotFoundException if given house does not exists.
      */
-    public Set<String> getDeviceIds(AccessToken accessToken, String houseId, String deviceType) throws EntityNotFoundException;
+    public Set<String> getDeviceIds(AccessToken accessToken, String houseId, String deviceType) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * This method returns status of the given device in the given location.
@@ -247,7 +249,7 @@ public interface HouseMateModelService {
      * @return
      * @throws EntityNotFoundException if given house, room or device does not exists.
      */
-    public String getDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId, String statusKey) throws EntityNotFoundException;
+    public String getDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId, String statusKey) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 
     /**
      * This method returns room location of the given occupant, if they are in the given house.
@@ -259,5 +261,5 @@ public interface HouseMateModelService {
      * @return
      * @throws EntityNotFoundException if given occupant or house do not exist.
      */
-    public String getOccupantLocation(AccessToken accessToken, String occupantId, String houseId) throws EntityNotFoundException;
+    public String getOccupantLocation(AccessToken accessToken, String occupantId, String houseId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
 }

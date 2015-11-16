@@ -1,6 +1,8 @@
 package cscie97.asn3.housemate.controller.command;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.model.appliance.Light;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
@@ -31,7 +33,7 @@ public class AvaLightsOffCommand extends ControllerCommand {
      * This method retrieves all light appliances in this Ava's room, and sets their MODE to OFF.
      */
     @Override
-    public void execute() throws EntityNotFoundException, InvalidStatusException {
+    public void execute() throws EntityNotFoundException, InvalidStatusException, AccessDeniedException, InvalidAccessTokenException {
         Set<String> lightIds = modelService.getDeviceIds(accessToken, houseId, roomId, Light.DEVICE_TYPE);
         for (String lightId : lightIds) {
             modelService.setDeviceStatus(accessToken, houseId, roomId, lightId, Light.MODE, Light.OFF);

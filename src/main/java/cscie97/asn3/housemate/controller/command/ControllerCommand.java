@@ -1,6 +1,8 @@
 package cscie97.asn3.housemate.controller.command;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.model.service.HouseMateModelService;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
@@ -32,5 +34,5 @@ public abstract class ControllerCommand {
      * @throws InvalidStatusException if invalid status is being set on a device.
      * @throws EntityExistsException if an entity with the given id already exists.
      */
-    public abstract void execute() throws EntityNotFoundException, InvalidStatusException, EntityExistsException;
+    public abstract void execute() throws EntityNotFoundException, InvalidStatusException, EntityExistsException, AccessDeniedException, InvalidAccessTokenException;
 }

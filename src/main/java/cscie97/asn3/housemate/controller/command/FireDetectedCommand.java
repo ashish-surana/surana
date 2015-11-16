@@ -1,6 +1,8 @@
 package cscie97.asn3.housemate.controller.command;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.model.appliance.Ava;
 import cscie97.asn3.housemate.model.appliance.Light;
 import cscie97.asn3.housemate.model.appliance.Window;
@@ -36,7 +38,7 @@ public class FireDetectedCommand extends ControllerCommand {
      * all the windows in this room. It calls 911 and report fire location, occupant identities.
      */
     @Override
-    public void execute() throws EntityNotFoundException, InvalidStatusException, EntityExistsException {
+    public void execute() throws EntityNotFoundException, InvalidStatusException, EntityExistsException, AccessDeniedException, InvalidAccessTokenException {
         Set<String> avaIds = modelService.getDeviceIds(accessToken, houseId, Ava.DEVICE_TYPE);
         String avaFireMessage = "Fire in '"+roomId +"', please leave '"+houseId+"' immediately!";
         for (String avaId : avaIds) {

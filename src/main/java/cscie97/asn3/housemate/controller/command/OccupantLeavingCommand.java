@@ -1,6 +1,8 @@
 package cscie97.asn3.housemate.controller.command;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.model.appliance.Light;
 import cscie97.asn3.housemate.model.appliance.Thermostat;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
@@ -38,7 +40,7 @@ public class OccupantLeavingCommand extends ControllerCommand {
      * to standby temperature.
      */
     @Override
-    public void execute() throws EntityNotFoundException, InvalidStatusException, EntityExistsException {
+    public void execute() throws EntityNotFoundException, InvalidStatusException, EntityExistsException, AccessDeniedException, InvalidAccessTokenException {
         modelService.unSetOccupantLocation(accessToken, occupantId);
 
         Set<String> occupantIds = modelService.getOccupantIds(accessToken, houseId, roomId);

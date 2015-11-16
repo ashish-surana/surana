@@ -64,7 +64,7 @@ public abstract class Command {
 
     }
 
-    protected void executeSetCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, InvalidStatusException {
+    protected void executeSetCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, InvalidStatusException, AccessDeniedException, InvalidAccessTokenException {
         throw new InvalidCommandException(commandParser.getInputCommand(), "Unsupported command");
     }
 
@@ -72,7 +72,7 @@ public abstract class Command {
         throw new InvalidCommandException(commandParser.getInputCommand(), "Unsupported command");
     }
 
-    protected void executeShowCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException {
+    protected void executeShowCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         throw new InvalidCommandException(commandParser.getInputCommand(), "Unsupported command");
     }
 

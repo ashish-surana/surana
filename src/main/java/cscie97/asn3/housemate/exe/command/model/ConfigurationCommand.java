@@ -2,6 +2,8 @@ package cscie97.asn3.housemate.exe.command.model;
 
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.exe.command.Command;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
@@ -21,7 +23,7 @@ public class ConfigurationCommand extends Command {
     }
 
     @Override
-    protected void executeShowCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException {
+    protected void executeShowCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         commandParser.ensureNextToken(CONFIGURATION);
 
         String entityType =  commandParser.safeGetNextToken();

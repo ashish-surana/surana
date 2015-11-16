@@ -1,6 +1,8 @@
 package cscie97.asn3.housemate.exe.command.model;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.exe.command.Command;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
@@ -29,7 +31,7 @@ public class RoomCommand extends Command {
      * </p>
      * @param commandParser
      */
-    protected void executeDefineCommand(CommandParser commandParser) throws InvalidCommandException, EntityExistsException, EntityNotFoundException {
+    protected void executeDefineCommand(CommandParser commandParser) throws InvalidCommandException, EntityExistsException, EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert commandParser !=null : "Command parser cannot be null";
 
         commandParser.ensureNextToken(ROOM);

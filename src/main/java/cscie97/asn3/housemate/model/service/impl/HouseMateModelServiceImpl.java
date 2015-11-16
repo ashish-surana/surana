@@ -40,6 +40,9 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     private static final String ACTIVITY_PREDICATE = "IS";
 
     private static final String HOUSE_CRUD_ACCESS_PERMISSION = "HOUSE_CRUD_ACCESS";
+    private static final String OCCUPANT_CRUD_ACCESS_PERMISSION = "OCCUPANT_CRUD_ACCESS";
+    private static final String _CRUD_ACCESS_PERMISSION = "_CRUD_ACCESS";
+    private static final String LISTENER_CRUD_ACCESS_PERMISSION = "DEVICE_STATUS_CHANGE_LISTENER_CRUD_ACCESS";
 
     private final Map<String, House> houses;
 
@@ -89,14 +92,18 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     }
 
     @Override
-    public void defineRoom(AccessToken accessToken, String houseId, String roomId, RoomType roomType, Integer floorNumber) throws EntityNotFoundException, EntityExistsException {
+    public void defineRoom(AccessToken accessToken, String houseId, String roomId, RoomType roomType, Integer floorNumber) throws EntityNotFoundException, EntityExistsException, AccessDeniedException, InvalidAccessTokenException {
+        entitlementService.checkAccess(accessToken, houseId, HOUSE_CRUD_ACCESS_PERMISSION);
+
         House house = getExistingHouse(houseId);
         Room room = house.defineRoom(floorNumber, roomId, roomType);
     }
 
     @Override
-    public void defineOccupant(AccessToken accessToken, String occupantId, OccupantType occupantType) throws EntityExistsException {
+    public void defineOccupant(AccessToken accessToken, String occupantId, OccupantType occupantType) throws EntityExistsException, EntitlementServiceException {
         assert occupantId != null && !"".equals(occupantId) : "Occupant id cannot be null or empty string";
+
+        entitlementService.checkAccess(accessToken, Resource.ALL_RESOURCE_ID, OCCUPANT_CRUD_ACCESS_PERMISSION);
 
         Occupant occupant = occupants.get(occupantId);
         if(occupant != null){
@@ -106,12 +113,14 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         assert occupantType != null : "Occupant type cannot be null";
 
         occupant = new Occupant(occupantId, occupantType);
+        entitlementService.createUser(occupantId, occupantId);
         occupants.put(occupantId, occupant);
     }
 
     @Override
-    public void addOccupant(AccessToken accessToken, String occupantId, String houseId) throws EntityNotFoundException {
+    public void addOccupant(AccessToken accessToken, String occupantId, String houseId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert occupantId != null && !"".equals(occupantId) : "Insufficient arguments";
+        entitlementService.checkAccess(accessToken, houseId, OCCUPANT_CRUD_ACCESS_PERMISSION, HOUSE_CRUD_ACCESS_PERMISSION);
 
         Occupant occupant = occupants.get(occupantId);
         if(occupant == null){
@@ -130,7 +139,8 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
 
 
     @Override
-    public void showConfiguration(AccessToken accessToken) {
+    public void showConfiguration(AccessToken accessToken) throws AccessDeniedException, InvalidAccessTokenException {
+        entitlementService.checkAccess(accessToken, Resource.ALL_RESOURCE_ID, OCCUPANT_CRUD_ACCESS_PERMISSION, HOUSE_CRUD_ACCESS_PERMISSION);
         System.out.println("Listing all the houses:");
         houses.forEach((houseId, house) ->
             house.showConfiguration()
@@ -161,9 +171,11 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
 }
 
     @Override
-    public void showHouseConfiguration(AccessToken accessToken, String houseId) throws EntityNotFoundException {
+    public void showHouseConfiguration(AccessToken accessToken, String houseId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) :
                 "House identifier cannot be null or empty string";
+
+        entitlementService.checkAccess(accessToken, houseId, OCCUPANT_CRUD_ACCESS_PERMISSION, HOUSE_CRUD_ACCESS_PERMISSION);
 
         House house = houses.get(houseId);
 
@@ -175,12 +187,14 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     }
 
     @Override
-    public void showRoomConfiguration(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException {
+    public void showRoomConfiguration(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) :
                 "House identifier cannot be null or empty string";
 
         assert roomId != null && !"".equals(roomId) :
                 "Room identifier cannot be null or empty string";
+
+        entitlementService.checkAccess(accessToken, houseId, OCCUPANT_CRUD_ACCESS_PERMISSION, HOUSE_CRUD_ACCESS_PERMISSION);
 
         System.out.println("*** Start of room configuration ***");
         House house = getExistingHouse(houseId);
@@ -194,7 +208,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     }
 
     @Override
-    public void defineSensor(AccessToken accessToken, String houseId, String roomId, String sensorType, String sensorId) throws EntityNotFoundException, EntityExistsException, InvalidEntityTypeException {
+    public void defineSensor(AccessToken accessToken, String houseId, String roomId, String sensorType, String sensorId) throws EntityNotFoundException, EntityExistsException, InvalidEntityTypeException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) :
                 "House identifier cannot be null or empty string";
 
@@ -207,13 +221,15 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         assert sensorId != null && !"".equals(sensorId) :
                 "Sensor identifier cannot be null or empty string";
 
-        House house = getExistingHouse(houseId);
+        String deviceTypePermission = sensorType.toUpperCase() + _CRUD_ACCESS_PERMISSION;
+        entitlementService.checkAccess(accessToken, houseId, deviceTypePermission, HOUSE_CRUD_ACCESS_PERMISSION);
 
+        House house = getExistingHouse(houseId);
         house.defineSensor(roomId, sensorType, sensorId);
     }
 
     @Override
-    public void defineAppliance(AccessToken accessToken, String houseId, String roomId, String applianceType, String applianceId) throws EntityNotFoundException, EntityExistsException, InvalidEntityTypeException {
+    public void defineAppliance(AccessToken accessToken, String houseId, String roomId, String applianceType, String applianceId) throws EntityNotFoundException, EntityExistsException, InvalidEntityTypeException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) :
                 "House identifier cannot be null or empty string";
 
@@ -226,13 +242,16 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         assert applianceId != null && !"".equals(applianceId) :
                 "Appliance identifier cannot be null or empty string";
 
+        String deviceTypePermission = applianceType.toUpperCase() + _CRUD_ACCESS_PERMISSION;
+        entitlementService.checkAccess(accessToken, houseId, deviceTypePermission, HOUSE_CRUD_ACCESS_PERMISSION);
+
         House house = getExistingHouse(houseId);
 
         house.defineAppliance(roomId, applianceType, applianceId);
     }
 
     @Override
-    public void setDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId, String statusKey, String newStatusValue) throws EntityNotFoundException, InvalidStatusException {
+    public void setDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId, String statusKey, String newStatusValue) throws EntityNotFoundException, InvalidStatusException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) :
                 "House identifier cannot be null or empty string";
 
@@ -255,6 +274,9 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
 
         Device device = house.getDevice(deviceId);
 
+        String deviceTypePermission = device.getType().toUpperCase() + _CRUD_ACCESS_PERMISSION;
+        entitlementService.checkAccess(accessToken, houseId, deviceTypePermission, HOUSE_CRUD_ACCESS_PERMISSION);
+
         String oldStatusValue = device.getStatus(statusKey);
 
         if(!newStatusValue.equals(oldStatusValue) || Ava.DEVICE_TYPE.equalsIgnoreCase(device.getType())){
@@ -273,7 +295,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     }
 
     @Override
-    public void showDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId, String statusKey) throws EntityNotFoundException {
+    public void showDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId, String statusKey) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) :
                 "House identifier cannot be null or empty string";
 
@@ -295,12 +317,15 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         if(device == null){
             throw new EntityNotFoundException(deviceId);
         }
+
+        String deviceTypePermission = device.getType().toUpperCase() + _CRUD_ACCESS_PERMISSION;
+        entitlementService.checkAccess(accessToken, houseId, deviceTypePermission, HOUSE_CRUD_ACCESS_PERMISSION);
 
         device.showStatus(statusKey);
     }
 
     @Override
-    public String getDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId, String statusKey) throws EntityNotFoundException {
+    public String getDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId, String statusKey) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) :
                 "House identifier cannot be null or empty string";
 
@@ -323,11 +348,14 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
             throw new EntityNotFoundException(deviceId);
         }
 
+        String deviceTypePermission = device.getType().toUpperCase() + _CRUD_ACCESS_PERMISSION;
+        entitlementService.checkAccess(accessToken, houseId, deviceTypePermission, HOUSE_CRUD_ACCESS_PERMISSION);
+
         return  device.getStatus(statusKey);
     }
 
     @Override
-    public void showDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId) throws EntityNotFoundException {
+    public void showDeviceStatus(AccessToken accessToken, String houseId, String roomId, String deviceId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) :
                 "House identifier cannot be null or empty string";
 
@@ -341,25 +369,34 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
 
         //Let's validate that given room exists
         Room room = getExistingRoom(house, roomId);
-        house.getDevice(deviceId).showStatus();
+        Device device = house.getDevice(deviceId);
+
+        String deviceTypePermission = device.getType().toUpperCase() + _CRUD_ACCESS_PERMISSION;
+        entitlementService.checkAccess(accessToken, houseId, deviceTypePermission, HOUSE_CRUD_ACCESS_PERMISSION);
+
+        device.showStatus();
     }
 
     @Override
-    public void registerListener(AccessToken accessToken, DeviceStatusChangeListener listener) {
+    public void registerListener(AccessToken accessToken, DeviceStatusChangeListener listener) throws AccessDeniedException, InvalidAccessTokenException {
         if(listener == null){
             throw new IllegalArgumentException("DeviceStatusChangeListener cannot be null");
         }
 
+        entitlementService.checkAccess(accessToken, Resource.ALL_RESOURCE_ID, LISTENER_CRUD_ACCESS_PERMISSION);
         deviceStatusChangeListeners.add(listener);
     }
 
 
     @Override
-    public Set<String> getDeviceIds(AccessToken accessToken, String houseId, String deviceType) throws EntityNotFoundException {
+    public Set<String> getDeviceIds(AccessToken accessToken, String houseId, String deviceType) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) : "House identifier cannot be null or empty string" ;
 
         assert deviceType != null && !"".equals(deviceType) :
                 "Device type cannot be null or empty string";
+
+        String deviceTypePermission = deviceType.toUpperCase() + _CRUD_ACCESS_PERMISSION;
+        entitlementService.checkAccess(accessToken, houseId, deviceTypePermission, HOUSE_CRUD_ACCESS_PERMISSION);
 
         House house = getExistingHouse(houseId);
 
@@ -368,7 +405,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     }
 
     @Override
-    public Set<String> getDeviceIds(AccessToken accessToken, String houseId, String roomId, String deviceType) throws EntityNotFoundException {
+    public Set<String> getDeviceIds(AccessToken accessToken, String houseId, String roomId, String deviceType) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) : "House identifier cannot be null or empty string" ;
 
         assert roomId != null && !"".equals(roomId) :
@@ -377,6 +414,9 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         assert deviceType != null && !"".equals(deviceType) :
                 "Device type cannot be null or empty string";
 
+        String deviceTypePermission = deviceType.toUpperCase() + _CRUD_ACCESS_PERMISSION;
+        entitlementService.checkAccess(accessToken, houseId, deviceTypePermission, HOUSE_CRUD_ACCESS_PERMISSION);
+
         House house = getExistingHouse(houseId);
 
         Set<String> deviceIds = house.getDeviceByRoomAndType(roomId, deviceType);
@@ -384,7 +424,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     }
 
     @Override
-    public void setOccupantLocation(AccessToken accessToken, String occupantId, String houseId, String roomId) throws EntityNotFoundException {
+    public void setOccupantLocation(AccessToken accessToken, String occupantId, String houseId, String roomId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert occupantId != null && !"".equals(occupantId) : "Occupant id cannot be null or empty string";
 
         Occupant occupant = occupants.get(occupantId);
@@ -397,17 +437,21 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         assert roomId != null && !"".equals(roomId) :
                 "Room identifier cannot be null or empty string";
 
+        entitlementService.checkAccess(accessToken, houseId, OCCUPANT_CRUD_ACCESS_PERMISSION, HOUSE_CRUD_ACCESS_PERMISSION);
+
         updateOccupantLocation(accessToken, occupant, houseId, roomId);
     }
 
     @Override
-    public void unSetOccupantLocation(AccessToken accessToken, String occupantId) throws EntityNotFoundException {
+    public void unSetOccupantLocation(AccessToken accessToken, String occupantId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert occupantId != null && !"".equals(occupantId) : "Occupant id cannot be null or empty string";
 
         Occupant occupant = occupants.get(occupantId);
         if(occupant == null){
             throw new EntityNotFoundException(occupantId);
         }
+
+        entitlementService.checkAccess(accessToken, Resource.ALL_RESOURCE_ID, OCCUPANT_CRUD_ACCESS_PERMISSION);
 
         KnowledgeGraph graph = KnowledgeGraph.getInstance();
         Node occupantNode = graph.getNode(occupant.getIdentifier());
@@ -432,8 +476,10 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     }
 
     @Override
-    public Set<String> getOccupantIds(AccessToken accessToken, String houseId) throws EntityNotFoundException {
+    public Set<String> getOccupantIds(AccessToken accessToken, String houseId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) : "House identifier cannot be null or empty string" ;
+
+        entitlementService.checkAccess(accessToken, houseId, OCCUPANT_CRUD_ACCESS_PERMISSION, HOUSE_CRUD_ACCESS_PERMISSION);
 
         //verify that house and room identifiers are valid
         House house = getExistingHouse(houseId);
@@ -456,11 +502,13 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     }
 
     @Override
-    public Set<String> getOccupantIds(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException {
+    public Set<String> getOccupantIds(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) : "House identifier cannot be null or empty string" ;
 
         assert roomId != null && !"".equals(roomId) :
                 "Room identifier cannot be null or empty string";
+
+        entitlementService.checkAccess(accessToken, houseId, OCCUPANT_CRUD_ACCESS_PERMISSION, HOUSE_CRUD_ACCESS_PERMISSION);
 
         //verify that house and room identifiers are valid
         House house = getExistingHouse(houseId);
@@ -484,7 +532,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     }
 
     @Override
-    public void setOccupantActivityStatus(AccessToken accessToken, String occupantId, OccupantActivityStatus activityStatus) throws EntityNotFoundException {
+    public void setOccupantActivityStatus(AccessToken accessToken, String occupantId, OccupantActivityStatus activityStatus) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert occupantId != null && !"".equals(occupantId) : "Occupant id cannot be null or empty string";
 
         Occupant occupant = occupants.get(occupantId);
@@ -493,6 +541,8 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         }
 
         assert activityStatus!=null : "Occupant activity status cannot be null";
+
+        entitlementService.checkAccess(accessToken, Resource.ALL_RESOURCE_ID, OCCUPANT_CRUD_ACCESS_PERMISSION);
 
         KnowledgeGraph graph = KnowledgeGraph.getInstance();
         Node occupantNode = graph.getNode(occupant.getIdentifier());
@@ -512,9 +562,11 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     }
 
     @Override
-    public String getOccupantLocation(AccessToken accessToken, String occupantId, String houseId) throws EntityNotFoundException {
+    public String getOccupantLocation(AccessToken accessToken, String occupantId, String houseId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert occupantId != null && !"".equals(occupantId) : "Occupant identifier cannot be null or empty string";
         assert houseId != null && !"".equals(houseId) : "House identifier cannot be null or empty string" ;
+
+        entitlementService.checkAccess(accessToken, houseId, OCCUPANT_CRUD_ACCESS_PERMISSION, HOUSE_CRUD_ACCESS_PERMISSION);
 
         //validate that house exists.
         House house = getExistingHouse(houseId);
@@ -554,7 +606,9 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
         return occupantLocation;
     }
 
-    private void updateOccupantLocation(AccessToken accessToken, Occupant occupant, String houseId, String roomId) throws EntityNotFoundException {
+    private void updateOccupantLocation(AccessToken accessToken, Occupant occupant, String houseId, String roomId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
+        entitlementService.checkAccess(accessToken, houseId, OCCUPANT_CRUD_ACCESS_PERMISSION, HOUSE_CRUD_ACCESS_PERMISSION);
+
         unSetOccupantLocation(accessToken, occupant.getIdentifier());
 
         KnowledgeGraph graph = KnowledgeGraph.getInstance();
@@ -600,11 +654,13 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     }
 
     @Override
-    public int getFloorNumber(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException {
+    public int getFloorNumber(AccessToken accessToken, String houseId, String roomId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert houseId != null && !"".equals(houseId) : "House identifier cannot be null or empty string" ;
 
         assert roomId != null && !"".equals(roomId) :
                 "Room identifier cannot be null or empty string";
+
+        entitlementService.checkAccess(accessToken, houseId, HOUSE_CRUD_ACCESS_PERMISSION);
 
         //verify that house and room identifiers are valid
         House house = getExistingHouse(houseId);

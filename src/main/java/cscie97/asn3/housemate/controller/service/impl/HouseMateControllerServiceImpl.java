@@ -3,9 +3,16 @@ package cscie97.asn3.housemate.controller.service.impl;
 import cscie97.asn3.housemate.controller.command.ControllerCommand;
 import cscie97.asn3.housemate.controller.command.factory.ControllerCommandFactory;
 import cscie97.asn3.housemate.controller.service.HouseMateControllerService;
+import cscie97.asn3.housemate.core.init.StartUpService;
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.credential.PasswordCredential;
+import cscie97.asn3.housemate.entitlement.exception.*;
+import cscie97.asn3.housemate.entitlement.service.HouseMateEntitlementService;
+import cscie97.asn3.housemate.entitlement.service.factory.HouseMateEntitlementServiceFactory;
 import cscie97.asn3.housemate.model.listener.support.DeviceStatusChangeEvent;
 import cscie97.asn3.housemate.model.service.exception.*;
+import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
+import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
 
 /**
  * This class is used to monitor changes in device's status. It then uses ControllerCommandFactory
@@ -28,7 +35,10 @@ public class HouseMateControllerServiceImpl implements HouseMateControllerServic
     @Override
     public void statusChanged(DeviceStatusChangeEvent event) {
         try {
-            AccessToken accessToken = null;
+            PasswordCredential passwordCredential = StartUpService.getAdminPassword();
+            HouseMateEntitlementService entitlementService = new HouseMateEntitlementServiceFactory().getService();
+            AccessToken accessToken = entitlementService.login(passwordCredential);
+
             ControllerCommand command = ControllerCommandFactory.createCommand(accessToken, event);
             command.execute();
         }catch (InvalidStatusException e){
@@ -48,6 +58,32 @@ public class HouseMateControllerServiceImpl implements HouseMateControllerServic
         } catch (InvalidCommandException e) {
             String message = "Error executing the controller command '"+ e.getCommand();
             message += "'. Error message is: '"+ e.getMessage()+"'.";
+            System.err.println(message);
+        } catch (AccessDeniedException e) {
+            String message = "Error executing a controller command. Error message is: '"+
+                    e.getMessage()+ "'";
+            System.err.println(message);
+        } catch (InvalidAccessTokenException e) {
+            String message = "Error executing a controller command. Error message is: '" +
+                   e.getMessage() + "'.";
+            if(e.getAccessToken() != null){
+                message += " Offending accessToken id: '" + e.getAccessToken().getIdentifier()
+                        +"' and user id: " + e.getAccessToken().getUserId() +"'.";
+            }else{
+                message += " Offending accessToken was null.";
+            }
+            System.err.println(message);
+        } catch (cscie97.asn3.housemate.entitlement.exception.EntityNotFoundException e) {
+            String message = "Error executing a controller command on entity with id: '"+ e.getEntity();
+            message += "'. Error message is: '"+ e.getMessage()+"'.";
+            System.err.println(message);
+        } catch (AuthenticationException e) {
+            String message = "Error logging in as user id: '" + e.getUserId();
+            message += "'. Error message is: '"+ e.getMessage()+"'.";
+            System.err.println(message);
+        } catch (EntitlementServiceException e) {
+            String message = "Error executing a command";
+            message += ". Error message is: '"+ e.getMessage()+"'.";
             System.err.println(message);
         }
     }

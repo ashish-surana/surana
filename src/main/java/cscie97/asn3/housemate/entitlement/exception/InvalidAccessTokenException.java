@@ -13,4 +13,8 @@ public class InvalidAccessTokenException extends EntitlementServiceException {
         super(message);
         this.accessToken = accessToken;
     }
+
+    public AccessToken getAccessToken() {
+        return accessToken;
+    }
 }

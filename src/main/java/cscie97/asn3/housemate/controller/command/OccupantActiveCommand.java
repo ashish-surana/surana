@@ -1,6 +1,8 @@
 package cscie97.asn3.housemate.controller.command;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
 import cscie97.asn3.housemate.model.service.exception.InvalidStatusException;
@@ -33,7 +35,7 @@ public class OccupantActiveCommand extends ControllerCommand {
      * This method invokes HouseMateModelService to update occupant's status as active.
      */
     @Override
-    public void execute() throws EntityNotFoundException, InvalidStatusException, EntityExistsException {
+    public void execute() throws EntityNotFoundException, InvalidStatusException, EntityExistsException, AccessDeniedException, InvalidAccessTokenException {
         modelService.setOccupantLocation(accessToken, occupantId, houseId, roomId);
         modelService.setOccupantActivityStatus(accessToken, occupantId, OccupantActivityStatus.Active);
     }

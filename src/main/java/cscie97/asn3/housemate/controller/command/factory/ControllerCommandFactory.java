@@ -67,7 +67,13 @@ public class ControllerCommandFactory {
      */
     private static ControllerCommand handleAvaCommand(AccessToken accessToken, DeviceStatusChangeEvent event) throws InvalidCommandException {
         if(Ava.LISTENING.equalsIgnoreCase(event.getStatusKey())){
-            String avaCommand = getAvaCommand(event.getNewStatusValue());
+            //listenedCommand is of the format: "joe_smith says: 'open door'"
+            CommandParser commandParser = new CommandParser(event.getNewStatusValue());
+            String occupantId = commandParser.getNextToken("Occupant identifier");
+            commandParser.ensureNextToken("says:");
+            String avaCommand = commandParser.getNextTokenInSingleQuotes("Ava command").toLowerCase();
+            commandParser.ensureTermination();
+
             switch (avaCommand){
                 case "open door":
                     logCommandInfo(AvaOpenDoorCommand.class.getSimpleName(), event);
@@ -100,6 +106,7 @@ public class ControllerCommandFactory {
     private static void logCommandInfo(String commandClass, DeviceStatusChangeEvent event) {
         System.out.println("Found "+ commandClass +" for responding to following event:");
         System.out.println(event);
+        System.out.println();
     }
 
     /**
@@ -140,20 +147,6 @@ public class ControllerCommandFactory {
         commandParser.ensureTermination();
         logCommandInfo(AvaOccupantLocationCommand.class.getSimpleName(), event);
         return new AvaOccupantLocationCommand(accessToken, event.getHouseId(),event.getRoomId(), event.getDeviceId(), occupantId);
-    }
-
-    /**
-     * This method is responsible for creating a ControllerCommand object in response to a change in
-     * Ava's LISTENING status.
-     */
-    private static String getAvaCommand(String listenedCommand) throws InvalidCommandException {
-        //listenedCommand is of the format: "joe_smith says: 'open door'"
-        CommandParser commandParser = new CommandParser(listenedCommand);
-        String occupantId = commandParser.getNextToken("Occupant identifier");
-        commandParser.ensureNextToken("says:");
-        String avaCommand = commandParser.getNextTokenInSingleQuotes("Ava command").toLowerCase();
-        commandParser.ensureTermination();
-        return avaCommand;
     }
 
     /**

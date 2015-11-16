@@ -1,6 +1,8 @@
 package cscie97.asn3.housemate.exe.command.model;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.exe.command.Command;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
 import cscie97.asn3.housemate.model.service.exception.InvalidCommandException;
@@ -26,7 +28,7 @@ public class DeviceCommand extends Command {
     }
 
     @Override
-    protected void executeSetCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, InvalidStatusException {
+    protected void executeSetCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, InvalidStatusException, AccessDeniedException, InvalidAccessTokenException {
         assert commandParser != null : "Command parser cannot be null";
         
         commandParser.ensureNextToken(APPLIANCE, SENSOR);
@@ -67,7 +69,7 @@ public class DeviceCommand extends Command {
     }
 
     @Override
-    protected void executeShowCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException {
+    protected void executeShowCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
         assert commandParser != null : "Command parser cannot be null";
 
         commandParser.ensureNextToken(APPLIANCE, SENSOR);

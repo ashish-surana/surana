@@ -41,7 +41,7 @@ public class AccessVerifierVisitor implements EntitlementVisitor {
             resourceRole.acceptVisitor(this);
 
             //if this resource role has satisfied all the required access, then we're done verifying the access.
-            if(access){
+            if(hasAccess()){
                break;
             }
         }
@@ -58,8 +58,11 @@ public class AccessVerifierVisitor implements EntitlementVisitor {
             return;
         }
 
-        //If this visitor has been asked to verify access to this resource, then let's do that.
-        if(resourceRole.getResource().getIdentifier().equals(claimedResourceId)){
+        String resourceId = resourceRole.getResource().getIdentifier();
+
+        //If this ResourceRole has permissions associated to the claimed resource, or "ALL" resource,
+        // then let's verify those permissions.
+        if(resourceId.equals(claimedResourceId) || resourceId.equals(Resource.ALL_RESOURCE_ID)){
             resourceRole.getRole().acceptVisitor(this);
         }
     }
@@ -86,7 +89,7 @@ public class AccessVerifierVisitor implements EntitlementVisitor {
             entitlement.acceptVisitor(this);
 
             //if this entitlement has satisfied all the required access, then we're done verifying the access.
-            if (access){
+            if (hasAccess()){
                 break;
             }
         }

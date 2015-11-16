@@ -1,6 +1,8 @@
 package cscie97.asn3.housemate.controller.command;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.model.appliance.Ava;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
@@ -41,7 +43,7 @@ public class AvaOccupantLocationCommand extends ControllerCommand{
      * It then communicates this location via given Ava.
      */
     @Override
-    public void execute() throws EntityNotFoundException, InvalidStatusException, EntityExistsException {
+    public void execute() throws EntityNotFoundException, InvalidStatusException, EntityExistsException, AccessDeniedException, InvalidAccessTokenException {
         String occupantLocation = modelService.getOccupantLocation(accessToken, occupantId, houseId);
 
         String avaMessage = null;

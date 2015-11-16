@@ -13,7 +13,7 @@ public class AccessDeniedException extends EntitlementServiceException {
 
     public AccessDeniedException(String userId, String resourceId, Set<String> unverifiedPermissions) {
         super("Access denied to user id: '"+ userId + "' for resource: '" + resourceId +
-                "', missing permissions: '"+ unverifiedPermissions + "'");
+                "', missing permissions: "+ unverifiedPermissions);
         this.resourceId = resourceId;
         this.unverifiedPermissions = unverifiedPermissions;
         this.userId = userId;
@@ -23,6 +23,18 @@ public class AccessDeniedException extends EntitlementServiceException {
     public String getMessage() {
 
         return "Access denied to user id: '"+ userId + "' for resource: '" + resourceId +
-                "', missing permissions: '"+ unverifiedPermissions + "'";
+                "', missing permissions: "+ unverifiedPermissions ;
+    }
+
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public Set<String> getUnverifiedPermissions() {
+        return unverifiedPermissions;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

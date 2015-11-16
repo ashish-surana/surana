@@ -42,6 +42,10 @@ public class StartUpService {
      */
     public static void init() throws InitializationException {
         try {
+            System.out.println("**********************************************************************");
+            System.out.println("Initializing HouseMate Automation System");
+            System.out.println("**********************************************************************");
+
             HouseMateEntitlementServiceFactory entitlementServiceFactory = new HouseMateEntitlementServiceFactory();
             HouseMateEntitlementService entitlementService = entitlementServiceFactory.getService();
 
@@ -55,6 +59,10 @@ public class StartUpService {
 
             AccessToken accessToken = entitlementService.login(adminPassword);
             modelService.registerListener(accessToken, controllerService);
+
+            System.out.println("**********************************************************************");
+            System.out.println("HouseMate Automation System initialized.");
+            System.out.println("**********************************************************************");
         } catch (EntitlementServiceException e) {
             throw new InitializationException(e);
         }

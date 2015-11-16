@@ -2,6 +2,8 @@ package cscie97.asn3.housemate.controller.command;
 
 import cscie97.asn3.housemate.controller.command.ControllerCommand;
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
+import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.model.appliance.Door;
 import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
 import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
@@ -32,7 +34,7 @@ public class AvaOpenDoorCommand extends ControllerCommand {
      * This method opens all the doors in this Ava's room.
      */
     @Override
-    public void execute() throws EntityNotFoundException, InvalidStatusException, EntityExistsException {
+    public void execute() throws EntityNotFoundException, InvalidStatusException, EntityExistsException, AccessDeniedException, InvalidAccessTokenException {
         Set<String> doorIds = modelService.getDeviceIds(accessToken, houseId, roomId, Door.DEVICE_TYPE);
         for (String doorId : doorIds) {
             modelService.setDeviceStatus(accessToken, houseId, roomId, doorId, Door.MODE, Door.OPEN);
