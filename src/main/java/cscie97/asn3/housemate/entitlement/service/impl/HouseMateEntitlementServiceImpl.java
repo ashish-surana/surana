@@ -8,7 +8,10 @@ import cscie97.asn3.housemate.entitlement.factory.EntitlementResourceFactory;
 import cscie97.asn3.housemate.entitlement.factory.impl.HouseMateEntitlementResourceFactory;
 import cscie97.asn3.housemate.entitlement.service.HouseMateEntitlementService;
 import cscie97.asn3.housemate.entitlement.visitor.EntitlementVisitor;
+import cscie97.asn3.housemate.entitlement.visitor.PrintConfigurationVisitor;
 import cscie97.asn3.housemate.entitlement.visitor.impl.AccessVerifierVisitor;
+
+import java.util.Set;
 
 /**
  *
@@ -105,6 +108,16 @@ public class HouseMateEntitlementServiceImpl implements HouseMateEntitlementServ
 
         if(!visitor.hasAccess()){
             throw new AccessDeniedException(user.getIdentifier(), resourceId, visitor.getUnverifiedPermissions());
+        }
+    }
+
+    @Override
+    public void showInventory() throws EntitlementServiceException {
+        EntitlementVisitor visitor = new PrintConfigurationVisitor();
+        Set<String> userIds = resourceFactory.getUserIds();
+
+        for (String userId  : userIds){
+            resourceFactory.getUser(userId).acceptVisitor(visitor);
         }
     }
 

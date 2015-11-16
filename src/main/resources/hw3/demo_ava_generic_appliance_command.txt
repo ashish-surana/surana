@@ -98,3 +98,5 @@ set appliance house1:kitchen1:ava1 status LISTENING value "joe_smith says: 'ligh
 
 set sensor house1:dining_room1:camera2 status OCCUPANT_DETECTED value "jill_smith"
 set appliance house1:dining_room1:ava2 status LISTENING value "jill_smith says: 'thermostat temperature 69'"
+
+show entitlements inventory

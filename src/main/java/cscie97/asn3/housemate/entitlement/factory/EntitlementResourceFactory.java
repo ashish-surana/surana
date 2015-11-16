@@ -3,6 +3,8 @@ package cscie97.asn3.housemate.entitlement.factory;
 import cscie97.asn3.housemate.entitlement.*;
 import cscie97.asn3.housemate.entitlement.exception.*;
 
+import java.util.Set;
+
 /**
  * This interface represents a factory for creating all "resources" required for Entitlement Service.
  * Some examples of these resources are users, roles and resources.
@@ -33,4 +35,6 @@ public interface EntitlementResourceFactory {
     public Resource getResource(String resourceId) throws EntityNotFoundException;
 
     public User getUser(AccessToken accessToken) throws InvalidAccessTokenException, AccessDeniedException;
+
+    public Set<String> getUserIds();
 }

@@ -19,4 +19,6 @@ public interface EntitlementVisitor {
     public void visitAccessToken(AccessToken accessToken);
 
     public void visitResource(Resource resource);
+
+    public void visitCredential(Credential credential);
 }

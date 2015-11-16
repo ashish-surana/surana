@@ -18,6 +18,10 @@ public class Resource extends Entity{
         this.description = description;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     /**
      * A resource that can be used to denote all possible resources.
      */

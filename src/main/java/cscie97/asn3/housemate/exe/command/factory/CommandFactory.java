@@ -79,6 +79,8 @@ public class CommandFactory {
                 return new ResourceCommand(accessToken);
             case "create resource_role":
                 return new ResourceRoleCommand(accessToken);
+            case "show entitlements":
+                return new EntitlementsCommand(accessToken);
             default:
                 return null;
         }

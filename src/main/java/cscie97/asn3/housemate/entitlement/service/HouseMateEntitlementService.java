@@ -35,4 +35,6 @@ public interface HouseMateEntitlementService {
     public void addResourceRoleToUser(String userId, String resourceRoleId) throws EntitlementServiceException;
 
     public void checkAccess(AccessToken accessToken, String resourceId, String... claimedPermissions) throws InvalidAccessTokenException, AccessDeniedException;
+
+    public void showInventory() throws EntitlementServiceException;
 }

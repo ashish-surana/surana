@@ -72,7 +72,7 @@ public abstract class Command {
         throw new InvalidCommandException(commandParser.getInputCommand(), "Unsupported command");
     }
 
-    protected void executeShowCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
+    protected void executeShowCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, EntitlementServiceException {
         throw new InvalidCommandException(commandParser.getInputCommand(), "Unsupported command");
     }
 

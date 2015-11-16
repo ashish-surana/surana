@@ -195,3 +195,4 @@ show configuration room house2:kitchen1
 #	show configurations for all houses
 show configuration
 
+show entitlements inventory

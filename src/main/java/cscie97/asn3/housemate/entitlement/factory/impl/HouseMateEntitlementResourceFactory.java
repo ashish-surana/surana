@@ -7,8 +7,10 @@ import cscie97.asn3.housemate.entitlement.exception.EntityNotFoundException;
 import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
 import cscie97.asn3.housemate.entitlement.factory.EntitlementResourceFactory;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This factory provides methods for creating all resources managed by HouseMate entitlement
@@ -213,6 +215,11 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
         }
 
         return user;
+    }
+
+    @Override
+    public Set<String> getUserIds() {
+        return Collections.unmodifiableSet(users.keySet());
     }
 
     public Permission getPermission(String identifier) throws EntityNotFoundException {

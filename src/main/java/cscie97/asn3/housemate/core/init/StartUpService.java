@@ -63,6 +63,7 @@ public class StartUpService {
             System.out.println("**********************************************************************");
             System.out.println("HouseMate Automation System initialized.");
             System.out.println("**********************************************************************");
+            System.out.println();
         } catch (EntitlementServiceException e) {
             throw new InitializationException(e);
         }

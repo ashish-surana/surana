@@ -73,6 +73,11 @@ public class AccessVerifierVisitor implements EntitlementVisitor {
     }
 
     @Override
+    public void visitCredential(Credential credential) {
+        //do nothing
+    }
+
+    @Override
     public void visitRole(Role role) {
         if (role == null) {
             return;

@@ -136,6 +136,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
             throw new EntityNotFoundException(houseId);
         }
 
+        //TODO Add this occupant user to house resource with $occupantType permission.
         house.addOccupant(occupant);
     }
 
