@@ -26,7 +26,7 @@ public class HouseCommand extends Command {
 
         commandParser.ensureTermination();
 
-        modelService.defineHouse(null, houseId);
+        modelService.defineHouse(accessToken, houseId);
     }
 
 }

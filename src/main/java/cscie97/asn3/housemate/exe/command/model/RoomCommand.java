@@ -50,7 +50,7 @@ public class RoomCommand extends Command {
 
         commandParser.ensureTermination();
 
-        modelService.defineRoom(null, houseId, roomId, roomType, floorNumber);
+        modelService.defineRoom(accessToken, houseId, roomId, roomType, floorNumber);
     }
 
 
