@@ -2,6 +2,7 @@ package cscie97.asn3.housemate.model.service.impl;
 
 import cscie97.asn3.housemate.entitlement.AccessToken;
 import cscie97.asn3.housemate.entitlement.Resource;
+import cscie97.asn3.housemate.entitlement.credential.VoicePrintCredential;
 import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
 import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
 import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
@@ -114,6 +115,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
 
         occupant = new Occupant(occupantId, occupantType);
         entitlementService.createUser(occupantId, occupantId);
+        entitlementService.setUserCredential(occupantId, new VoicePrintCredential(occupantId));
         occupants.put(occupantId, occupant);
     }
 

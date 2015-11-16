@@ -12,6 +12,10 @@ public class VoicePrintCredential extends Credential{
         super(userId, unencryptedVoicePrint);
     }
 
+    public VoicePrintCredential(String userId) throws EntitlementServiceException {
+        super(userId, "--" + userId + "--");
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(!(obj instanceof  VoicePrintCredential)){

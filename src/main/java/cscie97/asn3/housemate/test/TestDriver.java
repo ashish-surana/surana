@@ -31,7 +31,7 @@ public class TestDriver {
         args[0] = "C:\\Users\\assurana\\Documents\\Ashish\\Harvard\\2015\\CSCIE-97 Software Design\\hw4\\source\\surana\\src\\main\\" +
                 "resources\\" +
 //                "error-resources" +
-                "\\hw3\\\\demo_occupant_active.txt";
+                "\\hw3\\\\demo_ava_lights_on_off.txt";
 
         if(args == null || args.length == 0){
             printUsage();

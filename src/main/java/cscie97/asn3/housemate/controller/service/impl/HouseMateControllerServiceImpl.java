@@ -35,11 +35,7 @@ public class HouseMateControllerServiceImpl implements HouseMateControllerServic
     @Override
     public void statusChanged(DeviceStatusChangeEvent event) {
         try {
-            PasswordCredential passwordCredential = StartUpService.getAdminPassword();
-            HouseMateEntitlementService entitlementService = new HouseMateEntitlementServiceFactory().getService();
-            AccessToken accessToken = entitlementService.login(passwordCredential);
-
-            ControllerCommand command = ControllerCommandFactory.createCommand(accessToken, event);
+            ControllerCommand command = ControllerCommandFactory.createCommand(event);
             command.execute();
         }catch (InvalidStatusException e){
             String message = "Error executing a controller command on entity with id: '"+ e.getEntity().getIdentifier();

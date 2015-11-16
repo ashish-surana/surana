@@ -1,7 +1,13 @@
 package cscie97.asn3.housemate.controller.command.factory;
 
 import cscie97.asn3.housemate.controller.command.*;
+import cscie97.asn3.housemate.core.init.StartUpService;
 import cscie97.asn3.housemate.entitlement.AccessToken;
+import cscie97.asn3.housemate.entitlement.credential.PasswordCredential;
+import cscie97.asn3.housemate.entitlement.credential.VoicePrintCredential;
+import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
+import cscie97.asn3.housemate.entitlement.service.HouseMateEntitlementService;
+import cscie97.asn3.housemate.entitlement.service.factory.HouseMateEntitlementServiceFactory;
 import cscie97.asn3.housemate.model.appliance.Ava;
 import cscie97.asn3.housemate.model.appliance.Oven;
 import cscie97.asn3.housemate.model.appliance.Refrigerator;
@@ -27,22 +33,22 @@ public class ControllerCommandFactory {
      * the given DeviceStatusChangeEvent.
      * If no specific ControllerCommand is found for the given event, then a NoOpCommand is returned.
      */
-    public static ControllerCommand createCommand(AccessToken accessToken, DeviceStatusChangeEvent event) throws InvalidCommandException {
+    public static ControllerCommand createCommand(DeviceStatusChangeEvent event) throws InvalidCommandException, EntitlementServiceException {
         assert event!=null : "DeviceStatusChangeEvent cannot be null";
 
         switch (event.getDeviceType()){
             case Camera.DEVICE_TYPE:
-                return handleCameraCommand(accessToken, event);
+                return handleCameraCommand(event);
             case SmokeDetector.DEVICE_TYPE:
-                return handleSmokeDetectorCommand(accessToken, event);
+                return handleSmokeDetectorCommand(event);
             case Oven.DEVICE_TYPE:
-                return handleOvenCommand(accessToken, event);
+                return handleOvenCommand(event);
             case Ava.DEVICE_TYPE:
-                return handleAvaCommand(accessToken, event);
+                return handleAvaCommand(event);
             case Refrigerator.DEVICE_TYPE:
-                return handleRefrigeratorCommand(accessToken, event);
+                return handleRefrigeratorCommand(event);
             default:
-                return handleNoOpCommand(accessToken, event);
+                return handleNoOpCommand(event);
         }
     }
 
@@ -50,29 +56,33 @@ public class ControllerCommandFactory {
      * This method is responsible for creating a ControllerCommand object in response to a change in
      * refrigerator's beer-count status.
      */
-    private static ControllerCommand handleRefrigeratorCommand(AccessToken accessToken, DeviceStatusChangeEvent event) {
+    private static ControllerCommand handleRefrigeratorCommand(DeviceStatusChangeEvent event) throws EntitlementServiceException {
         if(Refrigerator.BEER_COUNT.equalsIgnoreCase(event.getStatusKey())){
             int beerCount = Integer.parseInt(event.getNewStatusValue());
             if(beerCount < 4){
+                AccessToken accessToken = getAccessTokenForAdmin();
+
                 logCommandInfo(OrderBeerCommand.class.getSimpleName(), event);
                 return new OrderBeerCommand(accessToken, event.getDeviceId(), event.getHouseId(), event.getRoomId());
             }
         }
-        return handleNoOpCommand(accessToken, event);
+        return handleNoOpCommand(event);
     }
 
     /**
      * This method is responsible for creating a ControllerCommand object in response to a change in
      * Ava's status.
      */
-    private static ControllerCommand handleAvaCommand(AccessToken accessToken, DeviceStatusChangeEvent event) throws InvalidCommandException {
+    private static ControllerCommand handleAvaCommand(DeviceStatusChangeEvent event) throws InvalidCommandException, EntitlementServiceException {
         if(Ava.LISTENING.equalsIgnoreCase(event.getStatusKey())){
-            //listenedCommand is of the format: "joe_smith says: 'open door'"
+            //listened command is of the format: "joe_smith says: 'open door'"
             CommandParser commandParser = new CommandParser(event.getNewStatusValue());
             String occupantId = commandParser.getNextToken("Occupant identifier");
             commandParser.ensureNextToken("says:");
             String avaCommand = commandParser.getNextTokenInSingleQuotes("Ava command").toLowerCase();
             commandParser.ensureTermination();
+
+            AccessToken accessToken = getAccessTokenForOccupant(occupantId);
 
             switch (avaCommand){
                 case "open door":
@@ -96,7 +106,7 @@ public class ControllerCommandFactory {
             }
         }
 
-        return handleNoOpCommand(accessToken, event);
+        return handleNoOpCommand(event);
     }
 
     /**
@@ -113,13 +123,13 @@ public class ControllerCommandFactory {
      * This method is responsible for creating a ControllerCommand object in response to an Ava command
      * for changing an appliance's status.
      */
-    private static ControllerCommand handleGenericApplianceCommand(AccessToken accessToken, DeviceStatusChangeEvent event, String avaCommand) throws InvalidCommandException {
+    private static ControllerCommand handleGenericApplianceCommand(AccessToken accessToken, DeviceStatusChangeEvent event, String avaCommand) throws InvalidCommandException, EntitlementServiceException {
         //Ava command should be of format: thermostat temperature 69
         CommandParser commandParser = new CommandParser(avaCommand);
         String applianceType  = commandParser.getNextToken("Appliance type");
 
         if(!DeviceType.isValidApplianceType(applianceType)){
-            return handleNoOpCommand(accessToken, event);
+            return handleNoOpCommand(event);
         }
 
         String statusKey = commandParser.getNextToken("Status key").toUpperCase();
@@ -153,41 +163,47 @@ public class ControllerCommandFactory {
      * This method is responsible for creating a ControllerCommand object in response to a change in
      * Oven's time-to-cook status.
      */
-    private static ControllerCommand handleOvenCommand(AccessToken accessToken, DeviceStatusChangeEvent event) {
+    private static ControllerCommand handleOvenCommand(DeviceStatusChangeEvent event) throws EntitlementServiceException {
         if(!Oven.TIME_TO_COOK.equalsIgnoreCase(event.getStatusKey())){
-            return handleNoOpCommand(accessToken, event);
+            return handleNoOpCommand(event);
         }
 
         int timeToCook = Integer.parseInt(event.getNewStatusValue());
 
         if(timeToCook == 0){
+            AccessToken accessToken = getAccessTokenForAdmin();
+
             logCommandInfo(OvenCookingCompletedCommand.class.getSimpleName(), event);
             return new OvenCookingCompletedCommand(accessToken,
                     event.getHouseId(), event.getRoomId(),
                     event.getDeviceType(), event.getDeviceId());
         }
 
-        return handleNoOpCommand(accessToken, event);
+        return handleNoOpCommand(event);
     }
 
     /**
      * This method is responsible for creating a ControllerCommand object in response to a change in
      * smoke detector's status.
      */
-    private static ControllerCommand handleSmokeDetectorCommand(AccessToken accessToken, DeviceStatusChangeEvent event) {
+    private static ControllerCommand handleSmokeDetectorCommand(DeviceStatusChangeEvent event) throws EntitlementServiceException {
         if (SmokeDetector.MODE.equalsIgnoreCase(event.getStatusKey())
                 && SmokeDetector.FIRE.equalsIgnoreCase(event.getNewStatusValue())){
+            AccessToken accessToken = getAccessTokenForAdmin();
+
             logCommandInfo(FireDetectedCommand.class.getSimpleName(), event);
             return new FireDetectedCommand(accessToken, event.getHouseId(), event.getRoomId());
         }
 
-        return handleNoOpCommand(accessToken, event);
+        return handleNoOpCommand(event);
     }
 
     /**
      * This method creates a NoOpCommand. NoOpCommand simply does nothing.
      */
-    private static ControllerCommand handleNoOpCommand(AccessToken accessToken, DeviceStatusChangeEvent event) {
+    private static ControllerCommand handleNoOpCommand(DeviceStatusChangeEvent event) throws EntitlementServiceException {
+        AccessToken accessToken = getAccessTokenForAdmin();
+
         logCommandInfo(NoOpCommand.class.getSimpleName(), event);
         return new NoOpCommand(accessToken, event.getDeviceId(), event.getDeviceType(), event.getStatusKey(),
                 event.getOldStatusValue(), event.getNewStatusValue());
@@ -197,7 +213,8 @@ public class ControllerCommandFactory {
      * This method is responsible for creating a ControllerCommand object in response to a change in
      * camera status.
      */
-    private static ControllerCommand handleCameraCommand(AccessToken accessToken, DeviceStatusChangeEvent event) {
+    private static ControllerCommand handleCameraCommand(DeviceStatusChangeEvent event) throws EntitlementServiceException {
+        AccessToken accessToken = getAccessTokenForAdmin();
         switch (event.getStatusKey()){
             case Camera.OCCUPANT_DETECTED:
                 logCommandInfo(OccupantDetectedCommand.class.getSimpleName(), event);
@@ -212,6 +229,20 @@ public class ControllerCommandFactory {
                 logCommandInfo(OccupantActiveCommand.class.getSimpleName(), event);
                 return new OccupantActiveCommand(accessToken, event.getHouseId(), event.getRoomId(), event.getNewStatusValue());
         }
-        return handleNoOpCommand(accessToken, event);
+        return handleNoOpCommand(event);
+    }
+
+    private static AccessToken getAccessTokenForAdmin() throws EntitlementServiceException {
+        PasswordCredential passwordCredential = StartUpService.getAdminPassword();
+        HouseMateEntitlementService entitlementService = new HouseMateEntitlementServiceFactory().getService();
+        AccessToken accessToken = entitlementService.login(passwordCredential);
+        return accessToken;
+    }
+
+    private static AccessToken getAccessTokenForOccupant(String occupantId) throws EntitlementServiceException {
+        VoicePrintCredential voicePrintCredential = new VoicePrintCredential(occupantId);
+        HouseMateEntitlementService entitlementService = new HouseMateEntitlementServiceFactory().getService();
+        AccessToken accessToken = entitlementService.login(voicePrintCredential);
+        return accessToken;
     }
 }
