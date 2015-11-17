@@ -146,12 +146,10 @@ public class HouseMateEntitlementResourceFactory implements EntitlementResourceF
 
         ResourceRole resourceRole = resourceRoles.get(resourceRoleName);
 
-        if(resourceRole != null){
-            throw new EntityExistsException(resourceRole);
+        if(resourceRole == null) {
+            resourceRole = new ResourceRole(resourceRoleName, role, resource);
+            resourceRoles.put(resourceRoleName, resourceRole);
         }
-
-        resourceRole = new ResourceRole(resourceRoleName, role, resource);
-        resourceRoles.put(resourceRoleName, resourceRole);
 
         return resourceRole;
     }

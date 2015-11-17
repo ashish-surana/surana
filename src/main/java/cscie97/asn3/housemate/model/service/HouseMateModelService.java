@@ -56,7 +56,7 @@ public interface HouseMateModelService {
      * @param houseId
      * @throws EntityNotFoundException If the house or occupant does not exists.
      */
-    public void addOccupant(AccessToken accessToken, String occupantId, String houseId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException;
+    public void addOccupant(AccessToken accessToken, String occupantId, String houseId) throws EntityNotFoundException, EntitlementServiceException;
 
     /**
      * Shows configuration of all the entities in the HouseMate model service.

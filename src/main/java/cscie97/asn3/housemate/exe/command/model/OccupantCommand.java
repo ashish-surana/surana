@@ -47,7 +47,7 @@ public class OccupantCommand extends Command {
     }
 
     @Override
-    protected void executeAddCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, EntityExistsException, AccessDeniedException, InvalidAccessTokenException {
+    protected void executeAddCommand(CommandParser commandParser) throws InvalidCommandException, EntityNotFoundException, EntityExistsException, EntitlementServiceException {
         //occupant joe_smith to_house house1
         assert commandParser !=null : "Command parser cannot be null";
 

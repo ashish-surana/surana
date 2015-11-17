@@ -45,39 +45,39 @@ public class HouseMateServiceExecutor {
                     String message = "Error executing command: '" + e.getCommand() + "'. Error message is: '";
                     message += e.getMessage() + "'.";
                     message += " Command was read from file: '" + fileName + "' at line :" + lineNum + ".";
-                    System.err.println(message);
+                    System.out.println(message);
                 }catch (InvalidStatusException e){
                     String message = "Error executing a command on entity with id: '"+ e.getEntity().getIdentifier();
                     message += "'. Error message is: '"+ e.getMessage()+"'.";
                     message += " Invalid status being set was: '" + e.getStatusKey();
                     message += "' with value: '" + e.getStatusValue() + "'.";
                     message += " Command was read from file: '" + fileName + "' at line :" + lineNum + ".";
-                    System.err.println(message);
+                    System.out.println(message);
                 }catch (EntityExistsException e){
                     String message = "Error executing a command on entity with id: '"+ e.getEntity().getIdentifier();
                     message += "'. Error message is: '"+ e.getMessage()+"'.";
                     message += " Command was read from file: '" + fileName + "' at line :" + lineNum + ".";
-                    System.err.println(message);
+                    System.out.println(message);
                 }catch (EntityNotFoundException e) {
                     String message = "Error executing a command on entity with id: '"+ e.getEntity();
                     message += "'. Error message is: '"+ e.getMessage()+"'.";
                     message += " Command was read from file: '" + fileName + "' at line :" + lineNum + ".";
-                    System.err.println(message);
+                    System.out.println(message);
                 } catch (EntityException e) {
                     String message = "Error executing a command on entity: '"+ e.getEntity();
                     message += "'. Error message is: '"+ e.getMessage()+"'.";
                     message += " Command was read from file: '" + fileName + "' at line :" + lineNum + ".";
-                    System.err.println(message);
+                    System.out.println(message);
                 } catch (cscie97.asn3.housemate.entitlement.exception.EntityException e) {
                     String message = "Error executing a command on entity: '"+ e.getEntity();
                     message += "'. Error message is: '"+ e.getMessage()+"'.";
                     message += " Command was read from file: '" + fileName + "' at line :" + lineNum + ".";
-                    System.err.println(message);
+                    System.out.println(message);
                 } catch (EntitlementServiceException e) {
                     String message = "Error executing a command. ";
                     message += "Error message is: '"+ e.getMessage()+"'.";
                     message += " Command was read from file: '" + fileName + "' at line :" + lineNum + ".";
-                    System.err.println(message);
+                    System.out.println(message);
                 }
             }
         }catch (FileNotFoundException e){

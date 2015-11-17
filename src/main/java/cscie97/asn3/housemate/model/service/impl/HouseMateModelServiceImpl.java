@@ -3,9 +3,7 @@ package cscie97.asn3.housemate.model.service.impl;
 import cscie97.asn3.housemate.entitlement.AccessToken;
 import cscie97.asn3.housemate.entitlement.Resource;
 import cscie97.asn3.housemate.entitlement.credential.VoicePrintCredential;
-import cscie97.asn3.housemate.entitlement.exception.AccessDeniedException;
-import cscie97.asn3.housemate.entitlement.exception.EntitlementServiceException;
-import cscie97.asn3.housemate.entitlement.exception.InvalidAccessTokenException;
+import cscie97.asn3.housemate.entitlement.exception.*;
 import cscie97.asn3.housemate.entitlement.service.HouseMateEntitlementService;
 import cscie97.asn3.housemate.entitlement.service.factory.HouseMateEntitlementServiceFactory;
 import cscie97.asn3.housemate.model.Device;
@@ -17,6 +15,9 @@ import cscie97.asn3.housemate.model.listener.DeviceStatusChangeListener;
 import cscie97.asn3.housemate.model.listener.support.DeviceStatusChangeEvent;
 import cscie97.asn3.housemate.model.service.HouseMateModelService;
 import cscie97.asn3.housemate.model.service.exception.*;
+import cscie97.asn3.housemate.model.service.exception.EntityExistsException;
+import cscie97.asn3.housemate.model.service.exception.EntityNotFoundException;
+import cscie97.asn3.housemate.model.support.HouseOccupant;
 import cscie97.asn3.housemate.model.support.OccupantActivityStatus;
 import cscie97.asn3.housemate.model.support.OccupantType;
 import cscie97.asn3.housemate.model.support.RoomType;
@@ -120,7 +121,7 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
     }
 
     @Override
-    public void addOccupant(AccessToken accessToken, String occupantId, String houseId) throws EntityNotFoundException, AccessDeniedException, InvalidAccessTokenException {
+    public void addOccupant(AccessToken accessToken, String occupantId, String houseId) throws EntityNotFoundException, EntitlementServiceException {
         assert occupantId != null && !"".equals(occupantId) : "Insufficient arguments";
         entitlementService.checkAccess(accessToken, houseId, OCCUPANT_CRUD_ACCESS_PERMISSION, HOUSE_CRUD_ACCESS_PERMISSION);
 
@@ -136,8 +137,13 @@ public class HouseMateModelServiceImpl implements HouseMateModelService {
             throw new EntityNotFoundException(houseId);
         }
 
-        //TODO Add this occupant user to house resource with $occupantType permission.
-        house.addOccupant(occupant);
+        HouseOccupant houseOccupant = house.addOccupant(occupant);
+
+        String resourceId = houseId;
+        String roleId = (occupant.getType().name() + "_" +houseOccupant.getStatus().name()).toUpperCase();
+        String resourceRoleId = resourceId + "_" + roleId;
+        entitlementService.createResourceRole(resourceRoleId, roleId, resourceId);
+        entitlementService.addResourceRoleToUser(occupantId, resourceRoleId);
     }
 
 

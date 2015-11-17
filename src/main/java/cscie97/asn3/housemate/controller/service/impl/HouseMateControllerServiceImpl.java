@@ -42,23 +42,23 @@ public class HouseMateControllerServiceImpl implements HouseMateControllerServic
             message += "'. Error message is: '"+ e.getMessage()+"'.";
             message += " Invalid status being set was: '" + e.getStatusKey();
             message += "' with value: '" + e.getStatusValue() + "'.";
-            System.err.println(message);
+            System.out.println(message);
         }catch (EntityExistsException e){
             String message = "Error executing a controller command on entity with id: '"+ e.getEntity().getIdentifier();
             message += "'. Error message is: '"+ e.getMessage()+"'.";
-            System.err.println(message);
+            System.out.println(message);
         }catch (EntityNotFoundException e) {
             String message = "Error executing a controller command on entity with id: '"+ e.getEntity();
             message += "'. Error message is: '"+ e.getMessage()+"'.";
-            System.err.println(message);
+            System.out.println(message);
         } catch (InvalidCommandException e) {
             String message = "Error executing the controller command '"+ e.getCommand();
             message += "'. Error message is: '"+ e.getMessage()+"'.";
-            System.err.println(message);
+            System.out.println(message);
         } catch (AccessDeniedException e) {
             String message = "Error executing a controller command. Error message is: '"+
                     e.getMessage()+ "'";
-            System.err.println(message);
+            System.out.println(message);
         } catch (InvalidAccessTokenException e) {
             String message = "Error executing a controller command. Error message is: '" +
                    e.getMessage() + "'.";
@@ -68,19 +68,19 @@ public class HouseMateControllerServiceImpl implements HouseMateControllerServic
             }else{
                 message += " Offending accessToken was null.";
             }
-            System.err.println(message);
+            System.out.println(message);
         } catch (cscie97.asn3.housemate.entitlement.exception.EntityNotFoundException e) {
             String message = "Error executing a controller command on entity with id: '"+ e.getEntity();
             message += "'. Error message is: '"+ e.getMessage()+"'.";
-            System.err.println(message);
+            System.out.println(message);
         } catch (AuthenticationException e) {
             String message = "Error logging in as user id: '" + e.getUserId();
             message += "'. Error message is: '"+ e.getMessage()+"'.";
-            System.err.println(message);
+            System.out.println(message);
         } catch (EntitlementServiceException e) {
             String message = "Error executing a command";
             message += ". Error message is: '"+ e.getMessage()+"'.";
-            System.err.println(message);
+            System.out.println(message);
         }
     }
 }

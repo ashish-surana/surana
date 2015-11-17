@@ -1,0 +1,51 @@
+# define roles
+# define role <role_id> <role_name> <role_description>
+define role ADULT_RESIDENT "Adult Resident Role" "Has all permissions of an adult resident"
+define role CHILD_RESIDENT "Child Resident Role" "Has all permissions of a child resident"
+define role PET_RESIDENT "Pet Resident Role" "Has all permission of a Pet resident"
+define role UNKNOWN_RESIDENT "Unknown resident role" "Has all permission of a unknown resident"
+
+define role ADULT_GUEST "Adult guest role" "Has all permission of a an adult guest"
+define role CHILD_GUEST "Child Guest role" "Has all permission of a child guest"
+define role PET_GUEST "Pet guest" "Has all permissions of a guest pet"
+define role UNKNOWN_GUEST "Unknown guest" "Has all permission of an unknown guest"
+
+# Add permissions to roles for all types of residents
+add entitlement_to_role ADULT_RESIDENT WINDOW_CRUD_ACCESS
+add entitlement_to_role ADULT_RESIDENT REFRIGERATOR_CRUD_ACCESS
+add entitlement_to_role ADULT_RESIDENT PANDORA_CRUD_ACCESS
+add entitlement_to_role ADULT_RESIDENT TV_CRUD_ACCESS
+add entitlement_to_role ADULT_RESIDENT LIGHT_CRUD_ACCESS
+add entitlement_to_role ADULT_RESIDENT THERMOSTAT_CRUD_ACCESS
+add entitlement_to_role ADULT_RESIDENT DOOR_CRUD_ACCESS
+add entitlement_to_role ADULT_RESIDENT AVA_CRUD_ACCESS
+add entitlement_to_role ADULT_RESIDENT OVEN_CRUD_ACCESS
+add entitlement_to_role ADULT_RESIDENT HOUSE_CRUD_ACCESS
+add entitlement_to_role ADULT_RESIDENT OCCUPANT_CRUD_ACCESS
+
+add entitlement_to_role CHILD_RESIDENT AVA_CRUD_ACCESS
+add entitlement_to_role CHILD_RESIDENT LIGHT_CRUD_ACCESS
+add entitlement_to_role CHILD_RESIDENT WINDOW_CRUD_ACCESS
+add entitlement_to_role CHILD_RESIDENT DOOR_CRUD_ACCESS
+
+add entitlement_to_role PET_RESIDENT WINDOW_CRUD_ACCESS
+add entitlement_to_role PET_RESIDENT DOOR_CRUD_ACCESS
+
+add entitlement_to_role UNKNOWN_RESIDENT PANDORA_CRUD_ACCESS
+add entitlement_to_role UNKNOWN_RESIDENT TV_CRUD_ACCESS
+add entitlement_to_role UNKNOWN_RESIDENT AVA_CRUD_ACCESS
+
+#Add permissions to roles for all types of guest
+add entitlement_to_role ADULT_GUEST LIGHT_CRUD_ACCESS
+add entitlement_to_role ADULT_GUEST AVA_CRUD_ACCESS
+add entitlement_to_role ADULT_GUEST DOOR_CRUD_ACCESS
+add entitlement_to_role ADULT_GUEST PANDORA_CRUD_ACCESS
+add entitlement_to_role ADULT_GUEST TV_CRUD_ACCESS
+
+add entitlement_to_role CHILD_GUEST AVA_CRUD_ACCESS
+add entitlement_to_role CHILD_GUEST WINDOW_CRUD_ACCESS
+add entitlement_to_role CHILD_GUEST DOOR_CRUD_ACCESS
+
+add entitlement_to_role PET_GUEST DOOR_CRUD_ACCESS
+
+add entitlement_to_role UNKNOWN_GUEST AVA_CRUD_ACCESS
