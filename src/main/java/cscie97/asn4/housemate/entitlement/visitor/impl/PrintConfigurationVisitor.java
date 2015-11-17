@@ -1,7 +1,8 @@
-package cscie97.asn4.housemate.entitlement.visitor;
+package cscie97.asn4.housemate.entitlement.visitor.impl;
 
 import cscie97.asn4.housemate.entitlement.*;
 import cscie97.asn4.housemate.entitlement.credential.PasswordCredential;
+import cscie97.asn4.housemate.entitlement.visitor.EntitlementVisitor;
 
 /**
  * This class visits each entitlement object, and prints its configuration.

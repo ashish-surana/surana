@@ -8,7 +8,7 @@ import cscie97.asn4.housemate.entitlement.factory.EntitlementResourceFactory;
 import cscie97.asn4.housemate.entitlement.factory.impl.HouseMateEntitlementResourceFactory;
 import cscie97.asn4.housemate.entitlement.service.HouseMateEntitlementService;
 import cscie97.asn4.housemate.entitlement.visitor.EntitlementVisitor;
-import cscie97.asn4.housemate.entitlement.visitor.PrintConfigurationVisitor;
+import cscie97.asn4.housemate.entitlement.visitor.impl.PrintConfigurationVisitor;
 import cscie97.asn4.housemate.entitlement.visitor.impl.AccessVerifierVisitor;
 
 import java.util.Set;
