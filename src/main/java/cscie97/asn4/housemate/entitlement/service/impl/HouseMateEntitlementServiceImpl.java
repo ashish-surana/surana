@@ -14,7 +14,7 @@ import cscie97.asn4.housemate.entitlement.visitor.impl.AccessVerifierVisitor;
 import java.util.Set;
 
 /**
- *
+ * This class provides concrete implementation of HouseMateEntitlementService interface.
  */
 public class HouseMateEntitlementServiceImpl implements HouseMateEntitlementService{
 

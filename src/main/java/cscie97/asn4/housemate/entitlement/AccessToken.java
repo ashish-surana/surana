@@ -8,7 +8,9 @@ import java.util.UUID;
 
 
 /**
- * Created by assurana on 11/3/2015.
+ * This class represents an access token for the associated user.
+ * An access token expires in 60 minutes after its creation.
+ * Access token identifier is randomly generated.
  */
 public class AccessToken extends Entity{
 
@@ -44,6 +46,9 @@ public class AccessToken extends Entity{
         visitor.visitAccessToken(this);
     }
 
+    /**
+     * This method returns the user id associated with this access token.
+     */
     public String getUserId() {
         return userId;
     }
@@ -53,15 +58,26 @@ public class AccessToken extends Entity{
         this.lastAccessed = now.getTime();
     }
 
+    /**
+     * Returns the last time this token was accessed.
+     */
     public Date getLastAccessed() {
         return lastAccessed;
     }
 
+    /**
+     *
+     * @return the date at which this access token expires(d).
+     */
     public Date getExpiryTime() {
         setLastAccessed();
         return new Date(expiryTime);
     }
 
+    /**
+     * Returns true if and only this token has expired.
+     *
+     */
     public boolean isExpired() {
         setLastAccessed();
         Calendar now = Calendar.getInstance();
