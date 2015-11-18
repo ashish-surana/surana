@@ -27,22 +27,40 @@ public class Role extends Entitlement{
         this.entitlements = new HashSet<>();
     }
 
+    /**
+     * @return the name of this role.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return the description of this role.
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * This method adds the given entitlement (role or permission)
+     * to this role.
+     * @param entitlement given entitlement to add
+     */
     public void addEntitlement(Entitlement entitlement){
         entitlements.add(entitlement);
     }
 
+    /**
+     * This method returns a modifiable set of all entitlements associated
+     * with this role.
+     */
     public Set<Entitlement> getEntitlements() {
         return entitlements;
     }
 
+    /**
+     * @return the unique identifier of this role.
+     */
     @Override
     public String getIdentifier() {
         return super.getIdentifier();

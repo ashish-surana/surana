@@ -27,5 +27,10 @@ public abstract class Entity {
         return identifier;
     }
 
+    /**
+     * This method accepts the given visitor, thereby allowing the visitor to
+     * traverse the domain object.
+     * @param visitor
+     */
     public abstract void acceptVisitor(EntitlementVisitor visitor);
 }

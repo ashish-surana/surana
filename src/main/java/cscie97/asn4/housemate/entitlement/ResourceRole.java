@@ -22,10 +22,18 @@ public class ResourceRole extends Entity{
         this.role = role;
     }
 
+    /**
+     *
+     * @return the resource associated with this resource-role.
+     */
     public Resource getResource() {
         return resource;
     }
 
+    /**
+     *
+     * @return the role associated with this resource-role.
+     */
     public Role getRole() {
         return role;
     }

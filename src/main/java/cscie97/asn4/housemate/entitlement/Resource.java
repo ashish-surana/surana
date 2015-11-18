@@ -18,6 +18,9 @@ public class Resource extends Entity{
         this.description = description;
     }
 
+    /**
+     * @return the description of this resource.
+     */
     public String getDescription() {
         return description;
     }

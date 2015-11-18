@@ -32,26 +32,53 @@ public class User extends Entity{
         this.resourceRoles = new HashMap<>();
     }
 
+    /**
+     * @return the name of this user.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return the encrypted password credential for this user. Or null if no password
+     * has been set.
+     */
     public Credential getPassword() {
         return password;
     }
 
+    /**
+     * @return the encrypted voice print credential for this user.
+     * Or null if no voice print has been set.
+     */
     public Credential getVoicePrint() {
         return voicePrint;
     }
 
+    /**
+     * This method sets the given password for this user.
+     * Existing password is removed.
+     * @param password
+     */
     public void setPassword(Credential password) {
         this.password = password;
     }
 
+    /**
+     * * This method sets the given voice print for this user.
+     * Existing voice print is removed.
+     * @param voicePrint
+     */
     public void setVoicePrint(Credential voicePrint) {
         this.voicePrint = voicePrint;
     }
 
+    /**
+     * This method adds the given resource role to this user, thereby giving this
+     * user a role for operating on the associated resource.
+     * @param resourceRole
+     * @throws EntitlementServiceException
+     */
     public void addResourceRole(ResourceRole resourceRole) throws EntitlementServiceException {
         if(resourceRole == null){
             throw new EntitlementServiceException("ResourceRole cannot be null");
@@ -60,14 +87,27 @@ public class User extends Entity{
         resourceRoles.put(resourceRole.getIdentifier(), resourceRole);
     }
 
+    /**
+     * This method returns a modifiable map of resource role identifiers,
+     * and resource roles associated to this user.
+     * @return
+     */
     public Map<String, ResourceRole> getResourceRoles() {
         return resourceRoles;
     }
 
+    /**
+     * @return the access token associated with this user. Or null if no access token
+     * is currently associated.
+     */
     public AccessToken getAccessToken() {
         return accessToken;
     }
 
+    /**
+     * Sets given access token for this user.
+     * @param accessToken
+     */
     public void setAccessToken(AccessToken accessToken) {
         this.accessToken = accessToken;
     }

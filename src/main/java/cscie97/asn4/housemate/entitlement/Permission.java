@@ -21,6 +21,10 @@ public class Permission extends Entitlement{
         this.name = name;
     }
 
+    /**
+     *
+     * @return the unique identifier of this permission.
+     */
     @Override
     public String getIdentifier() {
         return super.getIdentifier();
@@ -31,10 +35,18 @@ public class Permission extends Entitlement{
         visitor.visitPermission(this);
     }
 
+    /**
+     *
+     * @return description of this permission.
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     *
+     * @return name of this permission.
+     */
     public String getName() {
         return name;
     }
